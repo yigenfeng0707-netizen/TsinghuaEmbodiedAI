@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# LaTeX 编译中间文件
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 大文件（不提交模型 checkpoint 和 demo 数据）
+*.pth
+*.pth.bak
+*.hdf5
+*.h5
+
+# 敏感配置（含本地路径）
+.trae/
+.env

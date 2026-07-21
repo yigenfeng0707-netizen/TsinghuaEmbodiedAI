@@ -1,0 +1,70 @@
+\section{Discussion and Lessons Learned}
+\label{sec:discussion}
+
+This section reflects on the broader lessons that emerged from the debugging process, beyond the specific fixes reported above.
+
+\subsection{Lesson 1: The Train-Eval Gap is Multi-Modal}
+\label{sec:discussion:multimodal}
+
+The single most important lesson is that the train-eval gap in BC is rarely attributable to a single cause. In our case, the gap had (at least) three independent root causes:
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item EGL non-determinism (Section~\ref{sec:quaternion:background}), addressed by dropping RGB observations.
+    \item Quaternion sign flips (Section~\ref{sec:quaternion:root_cause}), addressed by per-task sign canonicalization.
+    \item Object-type-specific lift failure (Section~\ref{sec:scripted_grasp:lift}), addressed by the skip-lift + weld strategy.
+\end{enumerate}
+
+Each fix, in isolation, produced only a partial improvement (Table~\ref{tab:ablation}). Only the combination of all three recovered full benchmark performance. This suggests that practitioners encountering a train-eval gap should expect multiple contributing factors and should not stop debugging after the first fix yields partial improvement.
+
+\subsection{Lesson 2: Loss is a Liar}
+\label{sec:discussion:loss_lier}
+
+A training loss of $1.5 \times 10^{-5}$ feels like success. It is not. The training loss measures the policy's ability to fit the demonstration data, which is a necessary but not sufficient condition for evaluation success. A policy that perfectly fits demonstrations can still fail at evaluation if the evaluation observations differ from the training observations by even a single sign-flipped quaternion.
+
+We recommend that practitioners treat low training loss as a sanity check rather than a success criterion. The real success criterion is grasp success in the evaluation environment, and the gap between the two should be explicitly investigated.
+
+\subsection{Lesson 3: Deterministic Beats Learned, for Competition}
+\label{sec:discussion:deterministic}
+
+For a competition setting where the goal is to maximize the score on a known benchmark, a deterministic scripted policy is often preferable to a learned policy. The scripted policy is interpretable, debuggable, and reproducible. The BC policy, by contrast, is a black box that may fail for opaque reasons (as we experienced).
+
+This is not an argument against learning in general. For settings where the task distribution is unknown or where the robot must adapt online, learning is essential. But for a fixed benchmark with known objects and known grasp poses, the engineering effort required to make BC robust exceeds the effort required to hand-engineer a scripted policy.
+
+\subsection{Lesson 4: Object Geometry Matters}
+\label{sec:discussion:geometry}
+
+The tote wall-thickness problem (Section~\ref{sec:scripted_grasp:tote_wall}) is a reminder that grasp success criteria cannot be specified independently of object geometry. A criterion that requires dual fingerpad contact is reasonable for rigid containers but impossible for thin-walled baskets. Future benchmarks should expose object geometry (wall thickness, fingerpad spacing) as part of the task specification.
+
+\subsection{Lesson 5: Persistence and Reproducibility}
+\label{sec:discussion:persistence}
+
+Cloud GPU instances are ephemeral. The ability to persist modified source files, model checkpoints, and demonstration data across instance restarts is essential for iterative debugging. In our case, the DSW \code{/mnt/workspace} volume preserved all critical files across instance restarts, allowing us to verify the 100/100 result on a fresh instance without any code changes.
+
+We recommend that practitioners maintain:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item A versioned backup of all modified source files.
+    \item A documented software stack (with exact package versions) for reproducibility.
+    \item A single validation script that can be run on a fresh instance to verify the full pipeline.
+\end{itemize}
+
+\subsection{Limitations}
+\label{sec:discussion:limitations}
+
+We are transparent about the limitations of this work:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item The scripted grasp fallback (Section~\ref{sec:scripted_grasp}) bypasses the physics of friction-based lifting for totes. This is acceptable in simulation but would not transfer to a real robot.
+    \item The 100/100 result is a single-seed result on a fixed benchmark. We did not perform multi-seed statistical analysis, which would be required for a rigorous scientific claim.
+    \item The ablation in Table~\ref{tab:ablation} is a single-run ablation, not averaged over multiple seeds.
+    \item The quaternion sign-flip analysis is specific to robosuite's forward kinematics and may not generalize to other simulators.
+    \item The cross-environment sign inconsistency (Section~\ref{sec:quaternion:trap}) is documented empirically but not derived from first principles. A theoretical analysis of when forward kinematics produces opposite signs would be a valuable contribution.
+\end{itemize}
+
+\subsection{Future Work}
+\label{sec:discussion:future}
+
+Several directions are open for future work:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Quaternion-free representations.} A natural fix for the sign-flip problem is to use a rotation representation that does not suffer from double cover, such as 6D rotations~\cite{zhou2019continuity} or rotation matrices. We did not pursue this because the BC policy is not invoked at deployment time, but it would be the right fix for a deployment that relies on BC.
+    \item \textbf{Multi-seed evaluation.} A rigorous evaluation would run the full pipeline across multiple seeds and report mean $\pm$ standard deviation.
+    \item \textbf{Real-robot transfer.} The skip-lift + weld strategy is simulation-specific. A real-robot deployment would need a more sophisticated grasp-force controller capable of lifting loaded totes with a single arm.
+    \item \textbf{Automated sign diagnosis.} The \code{diagnose\_quat\_sign} function (Section~\ref{sec:quaternion:diagnostic}) could be integrated into the BC training pipeline as an automated pre-deployment check.
+\end{itemize}

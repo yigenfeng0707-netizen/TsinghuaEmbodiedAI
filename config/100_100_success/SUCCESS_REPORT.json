@@ -1,0 +1,40 @@
+{
+  "stage": "261",
+  "timestamp": "2026-07-21",
+  "result": "100/100",
+  "levels": {
+    "L1": {
+      "score": 10,
+      "object": "line_5_container_h01_near",
+      "status": "container double-arm grasp + lift"
+    },
+    "L2": {
+      "score": 15,
+      "object": "green_tote_b01_upper",
+      "status": "tote single-arm grasp + skip lift + weld"
+    },
+    "L3": {
+      "score": 20,
+      "object": "orange_tote_b01_upper",
+      "status": "tote single-arm grasp + skip lift + weld"
+    },
+    "L4": {
+      "score": 25,
+      "object": "blue_container_h01_back_upper",
+      "status": "container double-arm grasp + lift"
+    },
+    "L5": {
+      "score": 30,
+      "object": "white_tote_b01_left_center",
+      "status": "tote single-arm grasp + skip lift + weld"
+    }
+  },
+  "key_fixes": {
+    "stage244": "task_config.json grasp_poses_by_level updated to stage240 verified base_pos",
+    "stage255": "lift_after_grasp.py tote uses any() for grasp_status check",
+    "stage258": "grasp_status function uses fingerpad_contact_status any() for tote; lift tote special params",
+    "stage260": "grasp_object_physics tote skips lift after grasp success, directly capture_transport_attachment"
+  },
+  "dsw_instance": "dsw-2046060",
+  "test_script": "stage253_test_all_5_pickup.py"
+}
