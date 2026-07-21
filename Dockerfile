@@ -11,7 +11,7 @@
 #     -e PYOPENGL_PLATFORM=egl \
 #     jciiot:latest bash
 
-FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+FROM nvidia/cuda:13.3.0-runtime-ubuntu22.04
 
 LABEL maintainer="Yigen Feng <fengyigen@qq.com>"
 LABEL description="JCIIOT FactorySorting 100/100 reproduction environment"
