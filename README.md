@@ -1,5 +1,16 @@
 # TsinghuaEmbodiedAI
 
+> **🔒 PRIVATE REPOSITORY** — JCIIOT 2026 Competition Entry (100/100)
+>
+> **评委访问入口**：[ACCESS.md](ACCESS.md) · [Web UI 添加协作者](https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI/settings/access) · 联系作者：fengyigen@qq.com
+>
+> 如需访问权限，请：
+> 1. 通过 [ACCESS.md](ACCESS.md) 查看申请流程
+> 2. 发送 GitHub 用户名到 fengyigen@qq.com
+> 3. 24 小时内收到协作者邀请（只读权限）
+
+---
+
 Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation:
 A Systematic Methodology for Quaternion Sign Flips, Observation Mismatches,
 and Scripted Fallbacks.
