@@ -128,6 +128,13 @@ def grasp_object_physics(backend, object_name, grasp_pose):
 
 This single change raised the benchmark score from $35/100$ to $100/100$. The score breakdown is reported in Section~\ref{sec:experiments}.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig4_container_vs_tote.png}
+    \caption{Container vs.\ tote grasp strategies. Containers (left) use a dual-arm grasp with both fingerpads clamping the rigid body, followed by a physical lift of $0.15\,\mathrm{m}$. Totes (right) have thin walls ($14\,\mathrm{mm}$) that cannot be clamped by the $46\,\mathrm{mm}$ fingerpad spacing, so a single-arm grasp with relaxed contact criterion is used, followed by skip-lift and weld-to-gripper via \code{capture\_transport\_attachment}.}
+    \label{fig:container_vs_tote}
+\end{figure}
+
 \subsection{Discussion}
 \label{sec:scripted_grasp:discussion}
 

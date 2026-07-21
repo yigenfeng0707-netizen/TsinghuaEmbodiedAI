@@ -70,6 +70,13 @@ Concretely, we verify three conditions:
 
 When all three conditions hold, the policy trained on task A can be deployed on task B without retraining. In our benchmark, a single policy trained on level L3 transferred directly to levels L5, L7, and L9, saving multiple hours of training time per task.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig1_4step_diagnosis.png}
+    \caption{The 4-Step BC Debugging Methodology decision tree. Each step narrows the search space from ``something is wrong'' to a specific observation key and a specific failure mode, culminating in the transferability test that determines whether retraining is necessary.}
+    \label{fig:4step_diagnosis}
+\end{figure}
+
 \subsection{Summary}
 \label{sec:methodology:summary}
 

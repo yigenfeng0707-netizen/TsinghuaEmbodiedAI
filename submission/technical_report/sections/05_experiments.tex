@@ -45,6 +45,13 @@ The end-to-end pipeline, which we call \emph{ChampionTransportFlow}, consists of
 
 The pipeline is fully deterministic and does not require an LLM at runtime, in contrast to the original competition baseline which used an LLM for task planning.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/fig2_champion_flow.png}
+    \caption{ChampionTransportFlow pipeline architecture. Each of the five sequential skill invocations (MoveSkill, select\_grasp\_pose, PickUpSkill, MoveSkill, PlaceDownSkill) is executed deterministically per level, with object-type-aware logic embedded in PickUpSkill via the scripted grasp fallback of Section~\ref{sec:scripted_grasp}.}
+    \label{fig:champion_flow}
+\end{figure}
+
 \subsection{Configuration: task\_config.json as Single Source of Truth}
 \label{sec:experiments:config}
 
@@ -106,6 +113,13 @@ Training time & $\approx 13$ minutes on A10 \\
 
 The decision to omit RGB observations is motivated by the EGL non-determinism discussed in Section~\ref{sec:quaternion:background}: even with identical scene configurations, EGL offscreen rendering produces pixel-level differences ($\approx 1.9\%$ mean absolute error) between data collection and evaluation, and BC policies overfit to these subtle differences. Using only low-dimensional observations eliminates this source of nondeterminism.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig6_bc_loss.png}
+    \caption{BC\_RNN training loss curve over 800 epochs (low-dim only, horizon=10, hidden\_dim=64). The final L2 loss converges to the $1.5 \times 10^{-5}$ to $1.7 \times 10^{-5}$ range reported in Table~\ref{tab:bc_config}, with most of the reduction occurring within the first 200 epochs. Training completes in approximately 13 minutes on a single NVIDIA A10 GPU.}
+    \label{fig:bc_loss}
+\end{figure}
+
 \subsection{Quantitative Results}
 \label{sec:experiments:results}
 
@@ -133,6 +147,20 @@ L5 & white\_tote\_b01\_left\_center    & 30/30 & 92.2 & Single-arm grasp + skip 
 \end{tabular}
 \end{table}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig5_5level_scores.png}
+    \caption{Per-level scores on the FactorySorting benchmark. All 5 levels achieve the maximum score, totaling 100/100. Levels L4 (25 pts) and L5 (30 pts) carry the highest weight and use the container dual-arm lift and tote skip-lift+weld strategies respectively.}
+    \label{fig:5level_scores}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig8_execution_time.png}
+    \caption{Per-level elapsed wall-clock time on the fresh DSW instance (dsw-2046561). Total runtime is 363 seconds, with container levels (L1, L4) generally requiring more time for the physical lift phase, while tote levels (L2, L3, L5) benefit from the skip-lift shortcut.}
+    \label{fig:execution_time}
+\end{figure}
+
 \subsection{Ablation: Impact of Each Fix}
 \label{sec:experiments:ablation}
 
@@ -158,6 +186,13 @@ Baseline (BC policy, no fixes)                              & 0/100  & Train-eva
 \end{table}
 
 The ablation makes the relative contribution of each fix explicit. The low-dim and quaternion fixes are necessary to recover any success at all on L1, but they do not help with totes. The relaxed tote grasp criterion is necessary but not sufficient, because the subsequent lift still fails. The decisive fix is the skip-lift + weld strategy, which alone accounts for a $65$-point improvement.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig7_ablation.png}
+    \caption{Ablation study: incremental impact of each fix on total benchmark score. The skip-lift + weld strategy is the decisive fix, contributing a $65$-point improvement from $35/100$ to $100/100$. Earlier fixes (low-dim only, quaternion sign fix, relaxed tote grasp criterion, aggressive tote lift params) are necessary but not sufficient on their own.}
+    \label{fig:ablation}
+\end{figure}
 
 \subsection{Reproducibility}
 \label{sec:experiments:reproducibility}

@@ -232,15 +232,47 @@ python -m robot_agent.skills.sop_generator \
 
 ## 六、技术报告
 
-详见 `technical_report/technical_report.pdf`（18 页，483 KB），包含：
+提供三个版本的技术报告（内容一致，格式不同）：
+
+### 版本 1：Word 富文本版（推荐）
+- **文件**：`technical_report/technical_report.docx`（659 KB）
+- **PDF 副本**：`technical_report/technical_report.pdf`（991 KB，由 LibreOffice 从 Word 转换）
+- **特点**：富文本格式，含 8 张专业图表 + 5 张三线表 + 数学公式 + 19 篇参考文献
+- **适用**：评委可直接编辑批注，符合"Rich text Word documents"偏好
+
+### 版本 2：LaTeX 增强版
+- **文件**：`technical_report/technical_report_latex_enhanced.pdf`（1.07 MB，21 页）
+- **源码**：`technical_report/main.tex` + `sections/` + `references.bib` + `figures/`
+- **特点**：学术排版，含 8 张专业图表（与 Word 版相同），适合学术引用
+- **适用**：正式学术提交，arXiv 技术报告格式
+
+### 版本 3：LaTeX 原版
+- **文件**：`technical_report/main.pdf`（483 KB，18 页）
+- **特点**：原始 LaTeX 版本，无专业图表
+- **适用**：历史参考
+
+### 技术报告内容（三个版本一致）
 
 1. **Technology Description**（论文 02-04 章）：4 步 BC 调试方法论 + tote-aware grasp 策略 + Quaternion 符号修复
 2. **Novelty Statement**（论文 08 章，40% 权重）：
    - 运行时 monkey-patch 合规策略（业界首创）
    - container vs tote 物体类型差异发现
    - BC 训练 Loss 低但评估失败的根因分析（EGL 非确定性 + Quaternion 符号翻转）
-   - 引用 16 篇相关工作（robomimic, robosuite, DART, IRIS, Diffusion Policy 等）
+   - 引用 19 篇相关工作（robomimic, robosuite, DART, IRIS, Diffusion Policy 等）
 3. **Results & Analysis**（论文 05-06 章）：100/100 满分 + 消融实验 + 5 关卡详细结果
+
+### 专业图表清单（8 张）
+
+| 图表 | 类型 | 说明 |
+|------|------|------|
+| fig1_4step_diagnosis.png | 架构图 | 4 步 BC 诊断方法论流程图 |
+| fig2_champion_flow.png | 架构图 | ChampionTransportFlow 5 步骤流水线 |
+| fig3_monkey_patch.png | 架构图 | 运行时 monkey-patch 合规策略 |
+| fig4_container_vs_tote.png | 对比图 | container vs tote 物体类型差异 |
+| fig5_5level_scores.png | 数据图 | 5 关卡得分柱状图（100/100） |
+| fig6_bc_loss.png | 数据图 | BC 训练 Loss 曲线（800 epochs） |
+| fig7_ablation.png | 数据图 | 消融实验对比（0→100 修复链） |
+| fig8_execution_time.png | 数据图 | 各关卡执行时间对比 |
 
 ---
 
