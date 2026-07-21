@@ -35,19 +35,22 @@ submission/
 │       ├── place_operation.md         ← 放置操作说明
 │       └── assets/                    ← 图片资源
 ├── technical_report/
-│   ├── technical_report.pdf           ← 技术报告 PDF（18 页，483 KB）
+│   ├── technical_report.docx          ← **Word 富文本技术报告（推荐，659 KB）**
+│   ├── technical_report.pdf           ← Word 转 PDF（991 KB）
+│   ├── technical_report_latex_enhanced.pdf ← LaTeX 增强版 PDF（21 页，1.05 MB）
 │   ├── main.tex                       ← LaTeX 源码
-│   ├── references.bib                 ← 参考文献（16 篇）
-│   └── sections/                      ← 8 个章节源码（含 08_novelty）
+│   ├── references.bib                 ← 参考文献（19 篇）
+│   ├── sections/                      ← 8 个章节源码（含 08_novelty）
+│   └── figures/                      ← 8 张专业图表（PNG）
 ├── compliance/
 │   └── COMPLIANCE.md                  ← 合规性说明文档
 ├── trajectories/                      ← 轨迹文件（官方 JSON 模板格式）
-│   ├── L1_FactorySorting1_*.json      ← L1 关卡轨迹（待 DSW 生成）
-│   ├── L2_FactorySorting3_*.json      ← L2 关卡轨迹
-│   ├── L3_FactorySorting5_*.json      ← L3 关卡轨迹
-│   ├── L4_FactorySorting7_*.json      ← L4 关卡轨迹
-│   ├── L5_FactorySorting9_*.json      ← L5 关卡轨迹
-│   └── summary.json                   ← 汇总
+│   ├── L1_FactorySorting1_3FO3ERFHISEM.json ← L1 关卡轨迹（2.5 MB）
+│   ├── L2_FactorySorting3_3FO3ERRPH7X9.json ← L2 关卡轨迹（2.4 MB）
+│   ├── L3_FactorySorting5_3FO3ERTPXEUT.json ← L3 关卡轨迹（3.3 MB）
+│   ├── L4_FactorySorting7_3FO3ERFKY9RN.json ← L4 关卡轨迹（5.6 MB）
+│   ├── L5_FactorySorting9_3FO3ERT2C5FP.json ← L5 关卡轨迹（6.6 MB）
+│   └── summary.json                   ← 汇总（100/100, compliant=true）
 └── videos/                            ← 视频演示（5 关卡 + 总汇）
     ├── L1_demo.mp4                   ← L1 关卡演示（53s, 1.07MB）
     ├── L2_demo.mp4                   ← L2 关卡演示（46s, 1.22MB）
@@ -57,6 +60,8 @@ submission/
     ├── compilation.mp4               ← 5 关卡总汇（5分20秒, 8.00MB）
     └── video_summary.json            ← 录制摘要
 ```
+
+> **注**: 完整合规代码位于仓库根目录 `JCIIOT/`（不在 submission/code/），评委克隆整个仓库即可获得。submission/code/ 目录为可选的代码副本，当前为空，请参考仓库根目录 `JCIIOT/` 下的实际代码。
 
 ---
 
