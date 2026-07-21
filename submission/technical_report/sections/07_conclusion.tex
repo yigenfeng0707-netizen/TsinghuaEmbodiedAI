@@ -1,0 +1,10 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a systematic debugging methodology for the train-eval gap in Behavior Cloning policies for robotic manipulation, grounded in a semester-long effort to build a championship-level FactorySorting pipeline. The methodology isolates policy-side bugs from observation-side bugs through four steps: sanity check, observation comparison, isolation test, and transferability test.
+
+Applying this methodology to our benchmark, we identified three root causes of the train-eval gap: (i) non-deterministic EGL offscreen rendering, (ii) quaternion sign flips induced by different robot base poses, and (iii) a rarely documented cross-environment sign inconsistency where the same sign-fix rule rescues one task while breaking another. We further documented an object-type-aware scripted grasp fallback that achieves 100/100 on all 5 levels of the FactorySorting benchmark, with the decisive contribution being a skip-lift + weld-to-gripper strategy for thin-walled totes that cannot be lifted by single-arm friction.
+
+The contributions of this report are practical rather than algorithmic. We do not claim a new learning algorithm or a new theoretical result. We do claim, however, that the debugging methodology and the specific failure modes documented here are under-represented in the literature, and that practitioners encountering similar failures will benefit from the structured diagnostic approach and the specific fixes we have described.
+
+The complete pipeline, including all modified source files, demonstration data, model checkpoints, and validation scripts, is released as a community resource to support reproducibility and to spare future practitioners the weeks of debugging that this work encapsulates.

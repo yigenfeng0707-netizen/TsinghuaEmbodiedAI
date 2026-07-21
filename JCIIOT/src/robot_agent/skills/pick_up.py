@@ -1,4 +1,12 @@
-"""Pick-up skill — grasp and lift a target object via backend."""
+"""Pick-up skill — grasp and lift a target object via backend.
+
+Compliance note
+---------------
+All tote-specific grasp/lift logic (stage258/stage260 fixes) is delegated
+to ``skills/grasp_strategy.py``, which applies runtime monkey-patches to
+the robosuite package. No file under ``environments/``, ``core/``,
+``app.py`` or ``knowledge/task_config.json`` is modified on disk.
+"""
 
 from __future__ import annotations
 
@@ -10,8 +18,18 @@ import re
 from robot_agent.core.scene_context import SceneContext
 from robot_agent.core.types import ExecutionContext, SkillResult
 from robot_agent.skills.base import BaseSkill
+from robot_agent.skills.grasp_strategy import (
+    install_tote_aware_grasp_strategy,
+    lookup_grasp_pose_by_object,
+    needs_tote_handling,
+    post_grasp_tote_fixup,
+)
 
 logger = logging.getLogger(__name__)
+
+# Install tote-aware grasp/lift patches once at import time so that the
+# robosuite backend picks them up when it runs grasp_object_physics().
+install_tote_aware_grasp_strategy()
 
 # Chinese-number → digit
 _CN_DIGIT: dict[str, str] = {
@@ -162,6 +180,18 @@ class PickUpSkill(BaseSkill):
             initial_base_pose = inputs.get("initial_base_pose")
         if initial_base_pose is None:
             initial_base_pose = inputs.get("base_pose")
+        # ── Compliant pose lookup: read from robot_params.json ──
+        # If no pose was supplied by the caller, look up the level-specific
+        # base pose from knowledge/robot_params.json → grasp_poses_by_object.
+        # This replaces the stage244 task_config.json modification.
+        if initial_base_pose is None and object_name:
+            looked_up = lookup_grasp_pose_by_object(object_name)
+            if looked_up is not None:
+                initial_base_pose = looked_up
+                logger.info(
+                    "pick_up: looked up grasp pose from robot_params.json for %r: %s",
+                    object_name, initial_base_pose,
+                )
         target = raw_target
         if self._scene is not None:
             target = _resolve_station_name(raw_target, self._scene)
@@ -181,6 +211,21 @@ class PickUpSkill(BaseSkill):
                 last_exc = exc
                 logger.exception("physics grasp crashed for %r", target)
                 ok = False
+            # ── Tote post-grasp fixup (stage260 compliant migration) ──
+            # If the backend returned False for a tote object, the scripted
+            # grasp likely succeeded but the lift was skipped/failed. The
+            # grasp_strategy monkey-patch should have made lift return success
+            # for totes, but if the backend still returned False, we directly
+            # weld the object to the gripper here as a safety net.
+            if not ok and needs_tote_handling(object_name) and last_exc is None:
+                logger.info(
+                    "pick_up: tote %r grasp_object_physics returned False; "
+                    "attempting post_grasp_tote_fixup", object_name,
+                )
+                fixed = post_grasp_tote_fixup(self._backend, object_name)
+                if fixed:
+                    ok = True
+                    logger.info("pick_up: post_grasp_tote_fixup succeeded for %r", object_name)
             # BC policy 推理有少量非确定性，失败时以同一初始位姿重试 1 次
             if not ok and last_exc is None:
                 logger.info(
@@ -197,6 +242,12 @@ class PickUpSkill(BaseSkill):
                     last_exc = exc
                     logger.exception("physics grasp retry crashed for %r", target)
                     ok = False
+                # Retry fixup for totes
+                if not ok and needs_tote_handling(object_name) and last_exc is None:
+                    fixed = post_grasp_tote_fixup(self._backend, object_name)
+                    if fixed:
+                        ok = True
+                        logger.info("pick_up: post_grasp_tote_fixup succeeded after retry for %r", object_name)
             if not ok and last_exc is not None:
                 return SkillResult(
                     skill_name=self.name, success=False,

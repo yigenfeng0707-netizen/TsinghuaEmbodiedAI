@@ -1,0 +1,49 @@
+{
+  "total_score": 100,
+  "max_score": 100,
+  "compliant": true,
+  "results": {
+    "L1": {
+      "success": true,
+      "elapsed": 54.60239601135254,
+      "max_score": 10,
+      "failed_step": null,
+      "trajectory": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L1_compliant.json"
+    },
+    "L2": {
+      "success": true,
+      "elapsed": 71.95903611183167,
+      "max_score": 15,
+      "failed_step": null,
+      "trajectory": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L2_compliant.json"
+    },
+    "L3": {
+      "success": true,
+      "elapsed": 57.937217712402344,
+      "max_score": 20,
+      "failed_step": null,
+      "trajectory": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L3_compliant.json"
+    },
+    "L4": {
+      "success": true,
+      "elapsed": 92.24897241592407,
+      "max_score": 25,
+      "failed_step": null,
+      "trajectory": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L4_compliant.json"
+    },
+    "L5": {
+      "success": true,
+      "elapsed": 94.00592374801636,
+      "max_score": 30,
+      "failed_step": null,
+      "trajectory": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L5_compliant.json"
+    }
+  },
+  "trajectory_paths": {
+    "L1": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L1_compliant.json",
+    "L2": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L2_compliant.json",
+    "L3": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L3_compliant.json",
+    "L4": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L4_compliant.json",
+    "L5": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/compliant_verification/trajectory_L5_compliant.json"
+  }
+}

@@ -1,0 +1,92 @@
+\documentclass[11pt,a4paper]{article}
+
+% ============== Packages ==============
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage[margin=1in]{geometry}
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{multirow}
+
+% ============== Hyperref setup ==============
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+}
+
+% ============== Listings setup (Python code) ==============
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    language=Python,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red!70!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    tabsize=4,
+}
+
+% ============== Custom commands ==============
+\newcommand{\quat}{\mathbf{q}}
+\newcommand{\eef}{\mathrm{eef}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+% ============== Title ==============
+\title{Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation: \\
+       A Systematic Methodology for Quaternion Sign Flips, \\
+       Observation Mismatches, and Scripted Fallbacks}
+
+\author{
+  Yigen Feng\thanks{Corresponding author. Email: \texttt{fengyigen@qq.com}} \\
+  China Telecom Co., Ltd. Hangzhou Branch \\
+  Hangzhou, Zhejiang 310000, China \\
+  ORCID: 0009-0000-0000-0000
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Behavior Cloning (BC) is widely adopted for robotic manipulation due to its simplicity and sample efficiency, yet practitioners frequently encounter a perplexing failure mode: the policy achieves very low training loss but fails completely at evaluation time. This technical report distills practical lessons from a semester-long effort to build a championship-level FactorySorting pipeline (5 levels, 100/100 score) on the robosuite + robomimic + MuJoCo stack. We present a systematic 4-step debugging methodology (sanity check, observation comparison, isolation test, transferability test) and identify three root causes of the train-eval gap: (i) non-determinism in EGL offscreen rendering, (ii) quaternion sign flips induced by different robot base poses, and (iii) sign inconsistency across training environments. We further document a subtle and rarely discussed failure mode where the same fix (\code{fix\_quat\_sign}) rescues one task while breaking another. When BC remains unreliable, we describe a deterministic 5-stage scripted grasp fallback that treats container and tote objects differently: dual-arm grasp + physical lift for containers, versus single-arm grasp + weld-to-gripper (skipping lift) for thin-walled totes. The complete pipeline achieves 100/100 on all 5 levels of the FactorySorting benchmark, and we release the diagnostic scripts and configurations as a community resource.
+\end{abstract}
+
+% ============== Sections ==============
+\input{sections/01_introduction}
+\input{sections/02_methodology}
+\input{sections/03_quaternion}
+\input{sections/04_scripted_grasp}
+\input{sections/05_experiments}
+\input{sections/08_novelty}
+\input{sections/06_discussion}
+\input{sections/07_conclusion}
+
+% ============== Acknowledgments ==============
+\section*{Acknowledgments}
+This work was conducted as part of the JCIIOT Tsinghua Embodied AI competition (2026 edition). We thank the robosuite, robomimic, and MuJoCo open-source communities for the foundational software stack.
+
+% ============== References ==============
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

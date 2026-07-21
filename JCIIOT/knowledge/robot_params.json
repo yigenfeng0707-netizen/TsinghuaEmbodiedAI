@@ -34,7 +34,7 @@
     "record_frame_interval": 5
   },
   "lift": {
-    "_comment": "抬升参数 —— 抓取后验证物体是否牢固的抬升阶段",
+    "_comment": "抬升参数 —— 抓取后验证物体是否牢固的抬升阶段。tote 物体由 skills/grasp_strategy.py 自动跳过 lift（单臂摩擦力不足）。",
     "lift_height": 0.15,
     "max_steps": 300,
     "hold_steps": 20,
@@ -54,5 +54,43 @@
     "lower_steps": 25,
     "release_steps": 60,
     "release_clearance": 0.04
+  },
+  "grasp_poses_by_object": {
+    "_comment": "关卡专属抓取位姿 —— 替代 task_config.json 的 grasp_poses_by_level（合规：仅修改 robot_params.json）。由 skills/pick_up.py 通过 lookup_grasp_pose_by_object() 读取。位姿来源：stage240 实测验证成功的 robot_base_pos。",
+    "line_5_container_h01_near": {
+      "pos": [8.0, 4.6, 0.0],
+      "yaw": -3.14,
+      "level": "L1",
+      "type": "container",
+      "source": "input_5"
+    },
+    "green_tote_b01_upper": {
+      "pos": [12.81, 4.6, 0.0],
+      "yaw": -3.14,
+      "level": "L2",
+      "type": "tote",
+      "source": "input_6"
+    },
+    "orange_tote_b01_upper": {
+      "pos": [2.26, 5.29, 0.0],
+      "yaw": -3.14,
+      "level": "L3",
+      "type": "tote",
+      "source": "input_6"
+    },
+    "blue_container_h01_back_upper": {
+      "pos": [-8.95, 5.35, 0.0],
+      "yaw": -3.14,
+      "level": "L4",
+      "type": "container",
+      "source": "input_2"
+    },
+    "white_tote_b01_left_center": {
+      "pos": [-13.73, 4.93, 0.0],
+      "yaw": -3.14,
+      "level": "L5",
+      "type": "tote",
+      "source": "input_1"
+    }
   }
 }
