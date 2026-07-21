@@ -1,0 +1,21 @@
+# Stale bot GitHub Actions workflow
+# 自动标记和关闭陈旧的 Issue 和 Pull Request
+# 配置在 .github/stale.yml
+
+name: Mark stale issues and PRs
+
+on:
+  schedule:
+    - cron: '30 1 * * *'  # 每天 01:30 UTC = 09:30 北京时间
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          config-path: .github/stale.yml

@@ -1,0 +1,70 @@
+# Git 属性配置
+# 文档: https://git-scm.com/docs/gitattributes
+
+# 文本文件换行符处理
+# 自动转换文本文件的换行符到当前平台（CRLF on Windows, LF on Unix）
+* text=auto eol=lf
+
+# 特定文件类型强制使用 LF（跨平台一致性）
+*.py text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.toml text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+*.tex text eol=lf
+*.bib text eol=lf
+*.cff text eol=lf
+
+# Windows 特定文件保留 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制文件（不做换行符转换，不做 diff）
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.pth binary
+*.hdf5 binary
+*.h5 binary
+*.obj binary
+*.stl binary
+*.msh binary
+*.usd binary
+*.usda binary
+*.mp4 binary
+*.avi binary
+*.mov binary
+*.npy binary
+*.npz binary
+
+# 语言识别（GitHub Linguist）
+# 文档: https://github.com/github/linguist
+# 忽略某些文件的语言统计
+docs/*.png linguist-generated=true
+docs/*.jpg linguist-generated=true
+JCIIOT/robosuite/robosuite/models/assets/** linguist-vendored=true
+JCIIOT/robomimic/**/*.json linguist-language=JSON
+
+# 导出忽略（git archive 时排除）
+# 文档: https://git-scm.com/docs/gitattributes#_creating_an_archive
+.gitattributes export-ignore
+.gitignore export-ignore
+.github export-ignore
+.trae export-ignore
+tests export-ignore
+docs export-ignore
+*.md export-ignore
+
+# 合并策略
+# LaTeX 文件使用 union 合并（避免冲突）
+*.tex merge=union

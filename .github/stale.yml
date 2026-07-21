@@ -1,0 +1,62 @@
+# Stale bot 配置
+# 自动关闭陈旧的 Issue 和 Pull Request
+# 文档: https://github.com/actions/stale
+
+# Issue 和 PR 的陈旧判定天数
+daysUntilStale: 60
+daysUntilClose: 14
+
+# 只处理带有特定标签的 Issue（留空表示处理所有）
+onlyLabels: []
+
+# 标记为陈旧的标签
+staleLabel: wontfix
+
+# 豁免标签（有这些标签的 Issue 不会被标记为陈旧）
+exemptLabels:
+  - pinned
+  - security
+  - "good first issue"
+  - "help wanted"
+  - enhancement
+  - bug
+
+# Issue 标记为陈旧时的消息
+markComment: >
+  这个 Issue 已经 60 天没有活动了，将被标记为 `wontfix`。
+
+  如果仍有问题，请添加评论或移除 `wontfix` 标签。
+  否则将在 14 天后自动关闭。
+
+# PR 标记为陈旧时的消息（可选，默认与 Issue 相同）
+markPrComment: >
+  这个 Pull Request 已经 60 天没有活动了，将被标记为 `wontfix`。
+
+  如果仍在进行中，请添加评论或移除 `wontfix` 标签。
+  否则将在 14 天后自动关闭。
+
+# 关闭时的消息
+closeComment: >
+  这个 Issue 已因长时间无活动而自动关闭。
+  如仍有问题，请重新打开或创建新 Issue。
+
+# 关闭 PR 时的消息
+closePrComment: >
+  这个 Pull Request 已因长时间无活动而自动关闭。
+  如仍需合并，请重新打开或创建新 PR。
+
+# 限制每次操作的 Issue/PR 数量（避免 API 速率限制）
+operationsPerRun: 30
+
+# 只处理 Issue（不影响 PR）
+# onlyIssues: true
+
+# 只处理 PR（不影响 Issue）
+# onlyPrs: true
+
+# 起始日期（此日期之前的 Issue 不处理）
+# exemptIssueAssignees: true
+# exemptPrAssignees: true
+
+# 检查周期（每天 01:30 UTC = 09:30 北京时间）
+# 在 .github/workflows/stale.yml 中定义 schedule

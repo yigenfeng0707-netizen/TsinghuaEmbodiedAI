@@ -1,0 +1,72 @@
+# .dockerignore - 排除不需要的文件进入 Docker 构建上下文
+# 减小镜像构建上下文大小，加速构建
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# GitHub
+.github
+
+# 文档（论文已编译好 PDF，不需要 LaTeX 源码进入镜像）
+paper/
+docs/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 大文件（镜像中不包含，运行时挂载或下载）
+*.pth
+*.pth.bak
+*.hdf5
+*.h5
+*.obj
+*.stl
+*.msh
+*.mtl
+*.usd
+*.usda
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.avi
+*.mov
+
+# 日志
+*.log
+MUJOCO_LOG.TXT
+
+# 临时文件
+.trae/
+.env
+*.tmp
+*.bak
+
+# Docker 自身
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# 数据集
+JCIIOT/robosuite/dataset/
+
+# 归档
+archive/
