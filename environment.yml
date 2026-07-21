@@ -1,0 +1,25 @@
+name: jciiot
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - pytorch::pytorch>=2.0.0
+  - pytorch::torchvision
+  - conda-forge::opencv-python
+  - conda-forge::pillow
+  - conda-forge::matplotlib
+  - conda-forge::tqdm
+  - conda-forge::hydra-core
+  - conda-forge::wandb
+  - conda-forge::tensorboard
+  - pip:
+      - mujoco==3.10.0
+      - numpy==2.1.3
+      - numba==0.66.0
+      - robosuite>=1.5.2
+      - gdown
+      - playwright
+      - websocket-client

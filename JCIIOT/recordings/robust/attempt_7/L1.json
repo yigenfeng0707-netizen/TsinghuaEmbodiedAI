@@ -1,0 +1,90 @@
+{
+  "level": "L1",
+  "source": "input_5",
+  "target": "output_4",
+  "object_name": "line_5_container_h01_near",
+  "success": false,
+  "failed_step": "pick_up",
+  "steps": [
+    {
+      "skill_name": "move",
+      "success": true,
+      "message": "Moved to: input_5",
+      "payload": {
+        "action": "move",
+        "target": "input_5",
+        "goal_xy": [
+          8.0,
+          4.619
+        ],
+        "start_base_pose": {
+          "xy": [
+            13.5,
+            0.0
+          ],
+          "yaw": 3.1415927410125732,
+          "robot_base_pos": [
+            13.5,
+            0.0,
+            0.0
+          ],
+          "robot_base_ori": [
+            0.0,
+            0.0,
+            3.1415927410125732
+          ]
+        },
+        "final_base_pose": {
+          "xy": [
+            8.00050821472461,
+            4.600500586951929
+          ],
+          "yaw": -3.1394431591033936,
+          "robot_base_pos": [
+            8.00050821472461,
+            4.600500586951929,
+            0.0
+          ],
+          "robot_base_ori": [
+            0.0,
+            0.0,
+            -3.1394431591033936
+          ]
+        },
+        "waypoints": 51,
+        "reached": true
+      }
+    },
+    {
+      "skill_name": "select_grasp_pose",
+      "success": true,
+      "message": "Official BC-policy grasp pose selected",
+      "payload": {
+        "expected_xy": [
+          7.92,
+          4.6
+        ],
+        "expected_yaw": -3.169453
+      }
+    },
+    {
+      "skill_name": "pick_up",
+      "success": false,
+      "message": "Physics grasp FAIL: input_5",
+      "payload": {
+        "action": "pick_up",
+        "target": "input_5",
+        "object_name": "line_5_container_h01_near",
+        "grasp_initial_base_pose": {
+          "xy": [
+            7.92,
+            4.6
+          ],
+          "yaw": -3.169453
+        },
+        "method": "physics",
+        "ok": false
+      }
+    }
+  ]
+}

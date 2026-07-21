@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: "Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation: A Systematic Methodology for Quaternion Sign Flips, Observation Mismatches, and Scripted Fallbacks"
+message: "If you use this software or methodology in your research, please cite it as below."
+type: software
+authors:
+  - given-names: Yigen
+    family-names: Feng
+    email: fengyigen@qq.com
+    affiliation: "China Telecom Co., Ltd. Hangzhou Branch"
+repository-code: "https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI"
+version: "1.0.0"
+date-released: "2026-07-21"
+license: MIT
+preferred-citation:
+  type: techreport
+  title: "Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation"
+  author:
+    - given-names: Yigen
+      family-names: Feng
+      email: fengyigen@qq.com
+      affiliation: "China Telecom Co., Ltd. Hangzhou Branch"
+  year: 2026
+  institution: "China Telecom Co., Ltd. Hangzhou Branch"
