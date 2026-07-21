@@ -48,8 +48,35 @@ submission/
 │   ├── L4_FactorySorting7_*.json      ← L4 关卡轨迹
 │   ├── L5_FactorySorting9_*.json      ← L5 关卡轨迹
 │   └── summary.json                   ← 汇总
-└── videos/                            ← 视频演示（可选）
+└── videos/                            ← 视频演示（5 关卡 + 总汇）
+    ├── L1_demo.mp4                   ← L1 关卡演示（53s, 1.07MB）
+    ├── L2_demo.mp4                   ← L2 关卡演示（46s, 1.22MB）
+    ├── L3_demo.mp4                   ← L3 关卡演示（46s, 0.33MB）
+    ├── L4_demo.mp4                   ← L4 关卡演示（72s, 2.66MB）
+    ├── L5_demo.mp4                   ← L5 关卡演示（87s, 2.69MB）
+    ├── compilation.mp4               ← 5 关卡总汇（5分20秒, 8.00MB）
+    └── video_summary.json            ← 录制摘要
 ```
+
+---
+
+## 视频演示
+
+### 视频内容
+- **鸟瞰视角**（birdview camera）：640×480 分辨率，H264 编码，20 fps
+- **5 关卡独立视频**：每关展示完整的 move → pick → move → place 流程
+- **总汇视频**（compilation.mp4）：5 关卡拼接，每关前加 3 秒标题帧，总时长 5 分 20 秒
+
+### 视频列表
+
+| 文件 | 关卡 | 物体 | 时长 | 大小 | 得分 |
+|------|------|------|------|------|------|
+| L1_demo.mp4 | L1 | line_5_container_h01_near | 53s | 1.07 MB | 10/10 |
+| L2_demo.mp4 | L2 | green_tote_b01_upper | 46s | 1.22 MB | 15/15 |
+| L3_demo.mp4 | L3 | orange_tote_b01_upper | 46s | 0.33 MB | 20/20 |
+| L4_demo.mp4 | L4 | blue_container_h01_back_upper | 72s | 2.66 MB | 25/25 |
+| L5_demo.mp4 | L5 | white_tote_b01_left_center | 87s | 2.69 MB | 30/30 |
+| compilation.mp4 | 全部 | - | 5分20秒 | 8.00 MB | 100/100 |
 
 ---
 

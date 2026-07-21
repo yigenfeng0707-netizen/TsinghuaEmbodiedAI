@@ -1,0 +1,47 @@
+{
+  "total_score": 100,
+  "max_score": 100,
+  "results": {
+    "L1": {
+      "success": true,
+      "elapsed": 55.26029634475708,
+      "frames": 1064,
+      "video_path": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/L1_demo.mp4",
+      "video_size": 1118831,
+      "max_score": 10
+    },
+    "L2": {
+      "success": true,
+      "elapsed": 60.64822506904602,
+      "frames": 926,
+      "video_path": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/L2_demo.mp4",
+      "video_size": 1280248,
+      "max_score": 15
+    },
+    "L3": {
+      "success": true,
+      "elapsed": 54.240079402923584,
+      "frames": 926,
+      "video_path": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/L3_demo.mp4",
+      "video_size": 342396,
+      "max_score": 20
+    },
+    "L4": {
+      "success": true,
+      "elapsed": 86.63632726669312,
+      "frames": 1439,
+      "video_path": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/L4_demo.mp4",
+      "video_size": 2793933,
+      "max_score": 25
+    },
+    "L5": {
+      "success": true,
+      "elapsed": 90.85202503204346,
+      "frames": 1744,
+      "video_path": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/L5_demo.mp4",
+      "video_size": 2821036,
+      "max_score": 30
+    }
+  },
+  "compilation": "/mnt/workspace/JCIIOT_repo/JCIIOT/recordings/videos/compilation.mp4"
+}
