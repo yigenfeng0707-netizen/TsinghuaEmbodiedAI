@@ -51,15 +51,16 @@ submission/
 │   ├── L4_FactorySorting7_3FO3ERFKY9RN.json ← L4 关卡轨迹（5.6 MB）
 │   ├── L5_FactorySorting9_3FO3ERT2C5FP.json ← L5 关卡轨迹（6.6 MB）
 │   └── summary.json                   ← 汇总（100/100, compliant=true）
-└── videos/                            ← 视频演示（5 关卡 + 总汇）
-    ├── L1_demo.mp4                   ← L1 关卡演示（53s, 1.07MB）
-    ├── L2_demo.mp4                   ← L2 关卡演示（46s, 1.22MB）
-    ├── L3_demo.mp4                   ← L3 关卡演示（46s, 0.33MB）
-    ├── L4_demo.mp4                   ← L4 关卡演示（72s, 2.66MB）
-    ├── L5_demo.mp4                   ← L5 关卡演示（87s, 2.69MB）
-    ├── compilation.mp4               ← 5 关卡总汇（5分20秒, 8.00MB）
-    └── video_summary.json            ← 录制摘要
+└── videos_v5/                        ← 叙事纪录片（纯照片方案，无闪烁）
+    └── final/
+        ├── narration_full.mp4        ← 5 关卡叙事纪录片（2分49秒, 26.8MB, 1080p）
+        └── compilation.srt           ← 同步字幕（中文）
 ```
+
+> **视频方案说明**: 采用纯照片纪录片方案（Ken Burns 效果 + edge-tts 旁白 + SRT 同步字幕），
+> 彻底避免仿真视频 EGL 非确定性渲染噪声导致的闪烁问题。视频含 25 张官方 SOP 照片 + 11 张
+> 专业图表（matplotlib 渲染的 SOP 参数表 + 得分可视化 + 技术报告图表），三段式叙事结构
+> （任务概述 → 操作策略 → 图表总结），音视频字幕三者完全同步（误差 <40ms）。
 
 > **注**: 完整合规代码位于仓库根目录 `JCIIOT/`（不在 submission/code/），评委克隆整个仓库即可获得。submission/code/ 目录为可选的代码副本，当前为空，请参考仓库根目录 `JCIIOT/` 下的实际代码。
 
@@ -68,20 +69,18 @@ submission/
 ## 视频演示
 
 ### 视频内容
-- **鸟瞰视角**（birdview camera）：640×480 分辨率，H264 编码，20 fps
-- **5 关卡独立视频**：每关展示完整的 move → pick → move → place 流程
-- **总汇视频**（compilation.mp4）：5 关卡拼接，每关前加 3 秒标题帧，总时长 5 分 20 秒
+- **纯照片叙事纪录片**（narration_full.mp4）：1920×1080 30fps，H264 编码，2分49秒
+- **方案优势**：彻底避免仿真视频 EGL 非确定性渲染噪声导致的闪烁问题（alt_diff 0.0041）
+- **内容结构**：7 段式（片头 + L1-L5 + 片尾），每关三段式叙事（任务概述 → 操作策略 → 图表总结）
+- **素材**：25 张官方 SOP 照片（5 关 × 5 张）+ 11 张专业图表（SOP 参数表 + 得分图 + 技术报告图）
+- **音视频同步**：edge-tts 逐句生成中文旁白（zh-CN-XiaoxiaoNeural）+ tpad 视频跟随音频 + SRT 按音频实际时长累加（误差 <40ms）
 
-### 视频列表
+### 视频文件
 
-| 文件 | 关卡 | 物体 | 时长 | 大小 | 得分 |
-|------|------|------|------|------|------|
-| L1_demo.mp4 | L1 | line_5_container_h01_near | 53s | 1.07 MB | 10/10 |
-| L2_demo.mp4 | L2 | green_tote_b01_upper | 46s | 1.22 MB | 15/15 |
-| L3_demo.mp4 | L3 | orange_tote_b01_upper | 46s | 0.33 MB | 20/20 |
-| L4_demo.mp4 | L4 | blue_container_h01_back_upper | 72s | 2.66 MB | 25/25 |
-| L5_demo.mp4 | L5 | white_tote_b01_left_center | 87s | 2.69 MB | 30/30 |
-| compilation.mp4 | 全部 | - | 5分20秒 | 8.00 MB | 100/100 |
+| 文件 | 路径 | 时长 | 大小 | 规格 |
+|------|------|------|------|------|
+| narration_full.mp4 | `videos_v5/final/narration_full.mp4` | 2分49秒 | 26.8 MB | 1080p H264 |
+| compilation.srt | `videos_v5/final/compilation.srt` | - | - | 中文同步字幕 |
 
 ---
 
