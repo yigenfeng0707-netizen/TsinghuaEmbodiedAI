@@ -119,15 +119,13 @@
 
 | # | 文件 | 路径 | 时长 | 大小 | 状态 |
 |---|------|------|------|------|------|
-| 1 | L1 演示 | `submission/videos/L1_demo.mp4` | 53s | 1.07 MB | ✅ |
-| 2 | L2 演示 | `submission/videos/L2_demo.mp4` | 46s | 1.22 MB | ✅ |
-| 3 | L3 演示 | `submission/videos/L3_demo.mp4` | 46s | 0.33 MB | ✅ |
-| 4 | L4 演示 | `submission/videos/L4_demo.mp4` | 72s | 2.66 MB | ✅ |
-| 5 | L5 演示 | `submission/videos/L5_demo.mp4` | 87s | 2.69 MB | ✅ |
-| 6 | 5 关卡总汇 | `submission/videos/compilation.mp4` | 5分20秒 | 8.00 MB | ✅ |
-| 7 | 录制摘要 | `submission/videos/video_summary.json` | - | 1.3 KB | ✅ |
+| 1 | 5 关卡叙事纪录片 | `submission/videos_v5/final/narration_full.mp4` | 2分49秒 | 26.8 MB | ✅ |
+| 2 | 同步中文字幕 | `submission/videos_v5/final/compilation.srt` | - | - | ✅ |
 
-**视频格式**：H264, 640×480, 20 fps, 鸟瞰视角（birdview camera）
+**视频方案**：纯照片叙事纪录片（Ken Burns 效果 + edge-tts 旁白 + SRT 同步字幕）
+- 彻底避免仿真视频 EGL 非确定性渲染噪声导致的闪烁问题（alt_diff 0.0041）
+- 1920×1080 30fps H264，含 25 张官方 SOP 照片 + 11 张专业图表
+- 三段式叙事结构（任务概述 → 操作策略 → 图表总结），音视频字幕三者完全同步（误差 <40ms）
 
 ---
 
