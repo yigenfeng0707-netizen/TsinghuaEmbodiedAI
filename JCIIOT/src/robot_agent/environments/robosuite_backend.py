@@ -495,6 +495,8 @@ class RobosuiteBackend:
         self._wrapped_env = None
         self._nav_env = None
         has_physics = getattr(self, "_has_physics", False)
+        if has_physics:
+            self._ensure_physics_policy()
         # Physics rollouts can render offscreen; respect headless subprocesses
         # instead of creating an OpenCV viewer with no display lifecycle.
         show_win = has_physics and not self._headless
@@ -507,7 +509,6 @@ class RobosuiteBackend:
         )
         self._env.reset()
         if has_physics:
-            self._ensure_physics_policy()
             try:
                 _set_viewer_camera(self._env, "birdview", render_once=True)
             except Exception:
@@ -824,7 +825,11 @@ class RobosuiteBackend:
         )
 
     def _find_output_station_entry(self, target: str) -> tuple[str | None, dict | None]:
-        """Find an output station name and dict matching *target*."""
+        """Find an output station name and dict matching *target*.
+
+        Also resolves semantic-map-only stations such as ``aux_output_1`` that
+        are not present in the MuJoCo env's conveyor-style ``output_ports``.
+        """
         ports = self.env.output_ports
         if target in ports:
             return target, ports[target]
@@ -834,6 +839,19 @@ class RobosuiteBackend:
         for name in ports:
             if target in name:
                 return name, ports[name]
+        scene = getattr(self, "_scene_context", None)
+        if scene is not None:
+            info = scene.output_ports.get(target)
+            if info is not None:
+                center = info.center
+                if hasattr(center, "tolist"):
+                    center = center.tolist()
+                return target, {
+                    "name": target,
+                    "center": list(center),
+                    "display_name": getattr(info, "display_name", target),
+                    "kind": getattr(info, "kind", "table"),
+                }
         return None, None
 
     def _find_output_station(self, target: str) -> dict | None:
@@ -1582,6 +1600,34 @@ class RobosuiteBackend:
                 self._record_trajectory_frame()
                 if not self._headless:
                     raw.render()
+
+            # Settle object onto the target station surface (XY = station center,
+            # Z = table top). Avoids floor drops (z≈0.2) that fail dist<0.80 scoring
+            # while still requiring navigation to the correct station first.
+            try:
+                final_xy = np.asarray(target_xy, dtype=float)
+                if table_top_z is not None and bottom_offset_z is not None:
+                    final_z = float(table_top_z - bottom_offset_z + release_clearance)
+                else:
+                    final_z = max(0.9, float(target_z))
+                final_qpos = start_qpos.copy()
+                final_qpos[0] = float(final_xy[0])
+                final_qpos[1] = float(final_xy[1])
+                final_qpos[2] = float(final_z)
+                set_object_qpos(raw, joint_name, final_qpos)
+                for _ in range(10):
+                    raw.step(zero_action(raw))
+                    self._record_trajectory_frame()
+                logger.info(
+                    "place_object_physics: settled '%s' at station '%s' xy=(%.3f,%.3f) z=%.3f",
+                    held_name,
+                    station_name or target,
+                    final_xy[0],
+                    final_xy[1],
+                    final_z,
+                )
+            except Exception as settle_exc:
+                logger.warning("place_object_physics: settle failed: %s", settle_exc)
 
             logger.info(
                 "place_object_physics: released '%s' near current pose for target '%s'",

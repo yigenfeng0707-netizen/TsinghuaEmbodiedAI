@@ -27,8 +27,20 @@ _TASK_LIST = _TASK_CFG.get("tasks", [])
 SCENE_MAP: dict[int, tuple[str, str]] = {
     i: (t["scene_prefix"], t["env_name"]) for i, t in enumerate(_TASK_LIST)
 }
+
+
+def _primary_object_name(value) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            if item:
+                return str(item)
+    return ""
+
+
 SCENE_INPUT_OBJECT_MAP: dict[str, dict[str, str]] = {
-    t["env_name"]: {t["source"]: t["object"]} for t in _TASK_LIST
+    t["env_name"]: {t["source"]: _primary_object_name(t.get("object", ""))} for t in _TASK_LIST
 }
 
 
@@ -99,7 +111,7 @@ def _build_agent(app_dir: Path, task_index: int, knowledge_enabled: bool = True)
     os.environ.setdefault("OLLAMA_BASE_URL", _llm["ollama_base_url"])
     os.environ.setdefault("OLLAMA_MODEL", _llm["ollama_model"])
     os.environ.setdefault("OPENAI_BASE_URL", _llm.get("openai_base_url", "https://api.deepseek.com"))
-    os.environ.setdefault("OPENAI_MODEL", _llm.get("openai_model", "deepseek-chat"))
+    os.environ.setdefault("OPENAI_MODEL", _llm.get("openai_model", "deepseek-v4-flash"))
 
     env_name = _scene_env_name(task_index)
     semantic, grid_file = _choose_map_files(app_dir, task_index)
@@ -112,7 +124,6 @@ def _build_agent(app_dir: Path, task_index: int, knowledge_enabled: bool = True)
     backend = RobosuiteBackend(
         env_name=env_name,
         camera="birdview",
-        headless=True,
         drive_mode="direct",
     )
     backend._scene_context = scene_ctx
@@ -148,7 +159,7 @@ def _build_agent(app_dir: Path, task_index: int, knowledge_enabled: bool = True)
         object_map=full_object_map,
     )
 
-    # Second reset: keep subprocess evaluation headless while offscreen capture remains available.
+    # Second reset: now _has_physics=True, so visible birdview viewer is created
     backend.reset()
 
     scene_metadata = {

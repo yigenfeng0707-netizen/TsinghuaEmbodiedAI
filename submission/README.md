@@ -1,9 +1,10 @@
 # JCIIOT 2026 提交材料 — TsinghuaEmbodiedAI
 
-> **提交方**: 冯亦根 (Yigen Feng) · 中国电信股份有限公司杭州分公司
+> **提交方**: 冯亦根 (Yigen Feng) · 中国电信股份有限公司杭州分公司 · 队名 **SOP-MapGuard**
 > **比赛**: JCIIOT 2026 工业具身智能挑战赛 — 5 级 FactorySorting
-> **成绩**: **100/100 满分** (L1=10, L2=15, L3=20, L4=25, L5=30)
-> **日期**: 2026-07-21
+> **客观分基线（JSON 离线复算 / 榜）**: **19/100**（L1=10, L2=2, L3=0, L4=7, L5=0；碰撞罚分计入）
+> **说明**: `summary.json` 的 100/100 仅表示流程跑通，不是官方 `_score_steps` 客观分
+> **日期**: 2026-07-31（已同步官方 aux 站 / alternate objects）
 
 ---
 
@@ -50,7 +51,11 @@ submission/
 │   ├── L3_FactorySorting5_3FO3ERTPXEUT.json ← L3 关卡轨迹（3.3 MB）
 │   ├── L4_FactorySorting7_3FO3ERFKY9RN.json ← L4 关卡轨迹（5.6 MB）
 │   ├── L5_FactorySorting9_3FO3ERT2C5FP.json ← L5 关卡轨迹（6.6 MB）
-│   └── summary.json                   ← 汇总（100/100, compliant=true）
+│   ├── summary.json                   ← 流程跑通汇总（≠官方客观分）
+│   └── score_baseline.json            ← 官方规则离线客观分明细
+├── biendata_validation/               ← Biendata 验证提交包
+│   ├── SOP-MapGuard_validation_trajectories.zip
+│   └── README_UPLOAD.txt
 └── videos_v5/                        ← 叙事纪录片（纯照片方案，无闪烁）
     └── final/
         ├── narration_full.mp4        ← 5 关卡叙事纪录片（2分49秒, 26.8MB, 1080p）

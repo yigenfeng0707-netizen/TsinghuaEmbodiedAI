@@ -18,6 +18,18 @@ from robot_agent.skills.pick_up import PickUpSkill
 from robot_agent.skills.place_down import PlaceDownSkill
 
 
+def _primary_object_name(value) -> str:
+    """task_config may store object as str or list[str] (alternate scoring)."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            if item:
+                return str(item)
+    return ""
+
+
+
 @dataclass(frozen=True)
 class TransportReport:
     """Auditable result of one deterministic contest transport."""
@@ -53,6 +65,11 @@ class ChampionTransportFlow:
     ) -> None:
         self._backend = backend
         self._scene = scene_context
+        # Place/pick aux stations resolve via semantic map on the backend.
+        try:
+            backend._scene_context = scene_context
+        except Exception:
+            pass
         self._grid = grid
         self._config_path = Path(task_config_path)
         self._path_spacing = path_spacing
@@ -72,7 +89,7 @@ class ChampionTransportFlow:
         task, grasp_pose = self._load_level(level)
         source = str(task["source"])
         target = str(task["target"])
-        object_name = str(task["object"])
+        object_name = _primary_object_name(task.get("object", ""))
         steps: list[SkillResult] = []
 
         to_source = self._move.run(self._context(source))
@@ -114,7 +131,21 @@ class ChampionTransportFlow:
         # have different object positions); fall back to per-source poses.
         grasp_pose = data.get("grasp_poses_by_level", {}).get(normalized)
         if not isinstance(grasp_pose, dict):
-            grasp_pose = data["grasp_poses"].get(task["source"])
+            grasp_pose = data.get("grasp_poses", {}).get(task["source"])
+        if not isinstance(grasp_pose, dict):
+            # Fall back to robot_params.json per-object poses (skills-allowed config).
+            try:
+                from robot_agent.skills.grasp_strategy import lookup_grasp_pose_by_object
+                looked = lookup_grasp_pose_by_object(_primary_object_name(task.get("object", "")))
+            except Exception:
+                looked = None
+            if isinstance(looked, dict) and "xy" in looked:
+                grasp_pose = {
+                    "pos": [float(looked["xy"][0]), float(looked["xy"][1]), 0.0],
+                    "yaw": float(looked["yaw"]),
+                }
+            elif isinstance(looked, dict) and "pos" in looked:
+                grasp_pose = looked
         if not isinstance(grasp_pose, dict):
             raise ValueError(f"No official grasp pose for level {normalized} / source {task['source']!r}")
         return task, grasp_pose

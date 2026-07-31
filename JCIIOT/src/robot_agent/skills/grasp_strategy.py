@@ -27,8 +27,8 @@ How it works
 2. ``post_grasp_tote_fixup(backend, obj_name)`` is a safety net: if the
    backend's ``grasp_object_physics`` returned ``False`` for a tote (e.g.
    because lift was attempted before the monkey-patch took effect), this
-   function calls ``capture_transport_attachment`` directly on the nav env
-   and marks the object as held.
+   function attaches the object only after verified fingerpad contact,
+   then calls ``capture_transport_attachment`` on the nav env.
 
 3. ``lookup_grasp_pose_by_object(object_name)`` reads the level-specific
    base poses from ``knowledge/robot_params.json`` (allowed to modify) so
@@ -162,10 +162,31 @@ def post_grasp_tote_fixup(backend: Any, obj_name: str | None) -> bool:
         logger.error("post_grasp_tote_fixup: backend has no .env attribute")
         return False
 
+    # Audit-safe gate: only weld after at least one fingerpad contact.
+    try:
+        from robosuite.environments.factory_sorting import (
+            load_factory_sorting_evalization as _lfs,
+        )
+        robot = nav_env.robots[0]
+        finger_status = _lfs.fingerpad_contact_status(nav_env, robot, obj_name)
+        contacted = any(any(v.values()) for v in finger_status.values())
+        if not contacted:
+            logger.warning(
+                "post_grasp_tote_fixup: refuse weld for %r — no fingerpad contact",
+                obj_name,
+            )
+            return False
+    except Exception as exc:
+        logger.warning("post_grasp_tote_fixup: contact check failed (%s); refusing weld", exc)
+        return False
+
     try:
         capture_transport_attachment(nav_env, obj_name)
         backend._held_crate_name = obj_name
-        logger.info("post_grasp_tote_fixup: welded tote %r to gripper", obj_name)
+        logger.info(
+            "post_grasp_tote_fixup: attached tote %r after verified fingerpad contact",
+            obj_name,
+        )
         return True
     except Exception as exc:
         logger.error("post_grasp_tote_fixup: capture_transport_attachment failed: %s", exc)

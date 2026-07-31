@@ -11,6 +11,14 @@
 
 ---
 
+
+## Upstream sync (2026-07)
+
+Official JCIIOT task definitions were refreshed (ERRATUM + aux stations for L3/L5).
+See [ERRATUM.md](./ERRATUM.md) and [submission/UPSTREAM_SYNC_2026-07.md](./submission/UPSTREAM_SYNC_2026-07.md).
+Offline scoring: python JCIIOT/tools/score_trajectories_offline.py.
+
+
 Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation:
 A Systematic Methodology for Quaternion Sign Flips, Observation Mismatches,
 and Scripted Fallbacks.

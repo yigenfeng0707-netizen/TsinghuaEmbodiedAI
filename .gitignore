@@ -60,3 +60,16 @@ JCIIOT/robosuite/dataset/
 build/
 dist/
 *.egg-info/
+
+# Local debug / interference residue (keep working tree clean)
+JCIIOT/tools/_*.py
+JCIIOT/tools/keepalive.err
+JCIIOT/tools/keepalive.log
+JCIIOT/recordings/*/
+!JCIIOT/recordings/.gitkeep
+official_repo/
+archive/old_interference_2026/**
+!archive/old_interference_2026/README.md
+competition description/
+.trae/
+*.egg-info/

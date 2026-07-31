@@ -70,9 +70,11 @@
 | 3 | L3 轨迹 | `submission/trajectories/L3_FactorySorting5_3FO3ERTPXEUT.json` | 3.3 MB | ✅ | 8 字段齐全，grasp_end success=true |
 | 4 | L4 轨迹 | `submission/trajectories/L4_FactorySorting7_3FO3ERFKY9RN.json` | 5.6 MB | ✅ | 8 字段齐全，grasp_end success=true |
 | 5 | L5 轨迹 | `submission/trajectories/L5_FactorySorting9_3FO3ERT2C5FP.json` | 6.6 MB | ✅ | 8 字段齐全，grasp_end success=true |
-| 6 | 汇总 | `submission/trajectories/summary.json` | 1.9 KB | ✅ | total_score=100/100, compliant=true |
+| 6 | 汇总 | `submission/trajectories/summary.json` | 1.9 KB | ⚠ | 流程跑通汇总，≠官方客观分 |
+| 7 | 客观分基线 | `submission/trajectories/score_baseline.json` | — | ✅ | 官方规则离线复算 **19/100** |
+| 8 | Biendata zip | `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` | — | ✅ | 仅含 5 个 FactorySorting JSON |
 
-**评分验证**：5 关卡总分 **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30）
+**客观分验证（官方 `_score_steps`）**：**19/100**（L1=10, L2=2, L3=0, L4=7, L5=0）。L3/L5 需按新版 `aux_*` 任务在 DSW 重跑后再交。
 
 ### 材料 3：技术报告（必交）
 
@@ -149,7 +151,8 @@
 | 3 | L3 (FactorySorting5) | 20 | **20** | ✅ |
 | 4 | L4 (FactorySorting7) | 25 | **25** | ✅ |
 | 5 | L5 (FactorySorting9) | 30 | **30** | ✅ |
-| **总计** | | **100** | **100/100** | ✅ |
+| **总计（流程）** | | **100** | 流程跑通 ≠ 客观分 | ⚠ |
+| **总计（客观 JSON）** | | **100** | **19/100** 基线 | 榜一致 |
 
 ### Innovation（40% 权重，专家评审）
 
