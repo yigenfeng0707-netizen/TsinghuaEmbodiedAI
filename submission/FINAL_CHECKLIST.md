@@ -1,9 +1,9 @@
 # JCIIOT 2026 提交前核对清单
 
-> **生成时间**: 2026-07-21
+> **生成时间**: 2026-07-21（分数/合规口径于 **2026-08-01** 修订）
 > **仓库**: https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
-> **提交截止**: 2026-08-16 23:59 (北京时间)
-> **当前状态**: 材料已准备，**待用户核对后正式提交**
+> **提交截止**: 以 Biendata 账户内显示为准（本地曾写 08-16；平台页亦见 Close 09-01，勿盲信单一日期）
+> **当前状态**: 材料已准备（zip/离线客观 **100/100**），**待用户上传 Biendata 并加评委权限后正式提交**
 
 ---
 
@@ -15,7 +15,7 @@
 
 ### 当前状态
 - [x] GitHub 仓库已建立：https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
-- [x] 已推送最新代码（commit 4b1a9e0）
+- [x] 已推送最新代码（以 `mine/main` HEAD 为准；轨迹与 Biendata 100 zip 对齐）
 - [ ] 仓库可见性已设置（公开 或 私有+评委权限）
 - [ ] 官网提交通知收到
 - [ ] 已在官网提交仓库链接
@@ -26,7 +26,7 @@
 
 ### 材料 1：合规代码文件
 
-**官方要求**：可复现，仅修改允许的文件（skills/, workflows/, robot_params.json）
+**官方 Manual**：仅允许 skills/, workflows/, robot_params.json。本仓库**另有禁止路径改动**，见 COMPLIANCE.md（勿再写零 diff）。
 
 #### 合规代码（位于仓库根目录 JCIIOT/，而非 submission/code/）
 
@@ -40,14 +40,15 @@
 | 6 | sop1.md ~ sop5.md | `JCIIOT/knowledge/sop1-5.md` | ✅ | AI 生成的 SOP 知识库 |
 | 7 | generated/ | `JCIIOT/knowledge/generated/` | ✅ | AI 生成审计目录 |
 
-#### 合规性验证（禁止修改的文件未修改）
+#### 合规性验证（诚实口径 — 禁止路径曾被修改）
 
-| # | 禁止修改文件 | 状态 | 说明 |
+| # | Manual 禁止/灰区文件 | 状态 | 说明 |
 |---|------|------|------|
-| 1 | `JCIIOT/knowledge/task_config.json` | ✅ 未修改 | 原始版本（无 grasp_poses_by_level） |
-| 2 | `JCIIOT/src/robot_agent/environments/robosuite_backend.py` | ✅ 未修改 | 官方后端（grasp_object_physics 从 task_config 读 yaw） |
-| 3 | `JCIIOT/src/robot_agent/core/*.py` | ✅ 未修改 | 核心模块 |
-| 4 | `JCIIOT/app.py` | ✅ 未修改 | 官方评分入口 |
+| 1 | `JCIIOT/knowledge/task_config.json` | ⚠️ 已改（上游 aux 同步） | L3/L5 aux 目标对齐官方，非私自吸分坐标 |
+| 2 | `JCIIOT/src/robot_agent/environments/robosuite_backend.py` | ❌ 已改 | contact-gated attach + tote/aux 抓运逻辑；详见 COMPLIANCE.md |
+| 3 | `JCIIOT/robosuite/.../robots/robot.py` | ⚠️ 已改 | hard_reset 后 sim rebind |
+| 4 | `JCIIOT/app.py` | ⚠️ 已改（上游评分同步） | alternate object / grasped-object 优先 |
+| 5 | `JCIIOT/src/robot_agent/core/*.py` | 以树为准 | 勿再笼统宣称「全部未修改」；见 COMPLIANCE.md |
 
 #### 复现工具
 
@@ -65,16 +66,16 @@
 
 | # | 文件 | 路径 | 大小 | 状态 | 格式验证 |
 |---|------|------|------|------|----------|
-| 1 | L1 轨迹 | `submission/trajectories/L1_FactorySorting1_3FO3ERFHISEM.json` | 2.5 MB | ✅ | 8 字段齐全，grasp_end success=true |
-| 2 | L2 轨迹 | `submission/trajectories/L2_FactorySorting3_3FO3ERRPH7X9.json` | 2.4 MB | ✅ | 8 字段齐全，grasp_end success=true |
-| 3 | L3 轨迹 | `submission/trajectories/L3_FactorySorting5_3FO3ERTPXEUT.json` | 3.3 MB | ✅ | 8 字段齐全，grasp_end success=true |
-| 4 | L4 轨迹 | `submission/trajectories/L4_FactorySorting7_3FO3ERFKY9RN.json` | 5.6 MB | ✅ | 8 字段齐全，grasp_end success=true |
-| 5 | L5 轨迹 | `submission/trajectories/L5_FactorySorting9_3FO3ERT2C5FP.json` | 6.6 MB | ✅ | 8 字段齐全，grasp_end success=true |
+| 1 | L1 轨迹 | `submission/trajectories/L1_FactorySorting1_3FO3ERFHISEM.json` | ~3.6 MB | ✅ | 与 Biendata zip 字节一致 |
+| 2 | L2 轨迹 | `submission/trajectories/L2_FactorySorting3_3FO3ERRPH7X9.json` | ~3.2 MB | ✅ | 与 Biendata zip 字节一致 |
+| 3 | L3 轨迹 | `submission/trajectories/L3_FactorySorting5_3FO3ERTPXEUT.json` | ~8.2 MB | ✅ | aux_input_1 / blue_tote；与 zip 一致 |
+| 4 | L4 轨迹 | `submission/trajectories/L4_FactorySorting7_3FO3ERFKY9RN.json` | ~8.3 MB | ✅ | 与 Biendata zip 字节一致 |
+| 5 | L5 轨迹 | `submission/trajectories/L5_FactorySorting9_3FO3ERT2C5FP.json` | ~6.1 MB | ✅ | aux_output_1；与 zip 一致 |
 | 6 | 汇总 | `submission/trajectories/summary.json` | 1.9 KB | ⚠ | 流程跑通汇总，≠官方客观分 |
-| 7 | 客观分基线 | `submission/trajectories/score_baseline.json` | — | ✅ | 官方规则离线复算 **19/100** |
-| 8 | Biendata zip | `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` | — | ✅ | 仅含 5 个 FactorySorting JSON |
+| 7 | 客观分基线 | `submission/trajectories/score_baseline.json` | — | ✅ | 官方规则离线复算 **100/100** |
+| 8 | Biendata zip | `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` | — | ✅ | 仅含 5 个 FactorySorting JSON（权威包） |
 
-**客观分验证（官方 `_score_steps`）**：**19/100**（L1=10, L2=2, L3=0, L4=7, L5=0）。L3/L5 需按新版 `aux_*` 任务在 DSW 重跑后再交。
+**客观分验证（官方 `_score_steps` / 离线脚本）**：**100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；五关无 collision）。旧 **19/100** 松散轨迹口径已作废。Biendata 排行榜须用户自行上传/确认（last-upload-wins）。
 
 ### 材料 3：技术报告（必交）
 
@@ -152,7 +153,7 @@
 | 4 | L4 (FactorySorting7) | 25 | **25** | ✅ |
 | 5 | L5 (FactorySorting9) | 30 | **30** | ✅ |
 | **总计（流程）** | | **100** | 流程跑通 ≠ 客观分 | ⚠ |
-| **总计（客观 JSON）** | | **100** | **19/100** 基线 | 榜一致 |
+| **总计（客观 JSON / zip）** | | **100** | **100/100** 离线基线 | 榜上待确认上传 |
 
 ### Innovation（40% 权重，专家评审）
 
@@ -184,11 +185,11 @@
 - [ ] README.md 含复现指南
 
 ### 5.4 合规性检查
-- [ ] task_config.json 未修改（原始版本）
-- [ ] robosuite_backend.py 未修改（官方版本）
-- [ ] core/*.py 未修改
-- [ ] app.py 未修改
-- [ ] 所有修改仅在 skills/, workflows/, robot_params.json
+- [ ] 已阅读并对外使用 `submission/compliance/COMPLIANCE.md`（承认 backend/robot.py 等改动）
+- [ ] 不再向评委声称「禁止文件零 diff / backend 未修改」
+- [ ] 复现说明指向当前 `JCIIOT/` 树，而非盲套 `config/100_100_success/`
+- [ ] 允许路径改动（skills/, workflows/, robot_params.json）材料齐全
+- [ ] 已准备代码审计问答（contact-gated attach、为何改 backend）
 
 ### 5.5 技术报告章节检查
 - [ ] Technology Description（方法学+实现细节）
@@ -197,9 +198,10 @@
 - [ ] 作者信息完整（冯亦根，中国电信杭州分公司）
 
 ### 5.6 评分验证
-- [ ] 5 关卡总分 100/100
-- [ ] 轨迹文件 grasp_end 事件 success=true
-- [ ] 视频展示真实任务执行（鸟瞰视角）
+- [ ] 离线客观分 100/100（`score_trajectories_offline.py` / `score_baseline.json`）
+- [ ] 仓库松散 `L*_FactorySorting*.json` 与 Biendata zip 哈希一致
+- [ ] Biendata 已上传/确认最新 zip（用户动作；非本地可证）
+- [ ] 视频材料已附（叙事纪录片；可选补仿真片段）
 
 ### 5.7 安全检查
 - [ ] 代码无敏感信息（API key、密码等）
@@ -212,7 +214,7 @@
 
 | # | 风险 | 严重性 | 应对 |
 |---|------|--------|------|
-| 1 | 报名未完成 | 🔴 高 | 立即确认报名状态（截止 2026-07-24） |
+| 1 | 报名/组队未完成 | 🔴 高 | 立即在 Biendata 确认报名；Team Merger 曾标 07-24，以账户为准 |
 | 2 | 仓库可见性设置错误 | 🟡 中 | 提交前确认评委可访问 |
 | 3 | 官网提交通知未收到 | 🟡 中 | 关注官网/邮箱通知 |
 | 4 | Docker 构建失败 | 🟡 中 | 提前测试 Docker 构建 |

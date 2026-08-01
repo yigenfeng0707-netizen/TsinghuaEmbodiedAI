@@ -2,9 +2,9 @@
 
 > **提交方**: 冯亦根 (Yigen Feng) · 中国电信股份有限公司杭州分公司 · 队名 **SOP-MapGuard**
 > **比赛**: JCIIOT 2026 工业具身智能挑战赛 — 5 级 FactorySorting
-> **客观分基线（JSON 离线复算 / 榜）**: **19/100**（L1=10, L2=2, L3=0, L4=7, L5=0；碰撞罚分计入）
-> **说明**: `summary.json` 的 100/100 仅表示流程跑通，不是官方 `_score_steps` 客观分
-> **日期**: 2026-07-31（已同步官方 aux 站 / alternate objects）
+> **客观分基线（JSON 离线复算 / Biendata zip）**: **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；无 collision）
+> **说明**: `summary.json` 的流程成功 ≠ `_score_steps` 客观分；排行榜以 Biendata 最后一次上传为准（本地 100 ≠ 已上榜）
+> **日期**: 2026-08-01（aux 站轨迹已覆盖进 `trajectories/`，与 zip 一致）
 
 ---
 

@@ -19,13 +19,15 @@
 - 平台客观分**只看轨迹 JSON**，多次提交以最后一次为准。
 - 未做代码核查前的分可能在核查后变化；禁止靠改 JSON「吸箱子」。
 - 本地离线脚本：`JCIIOT/tools/score_trajectories_offline.py`
-- 当前基线：**19/100**（与 GitHub Leaderboard SOP-MapGuard 一致）
+- **2026-08-01 更新**：`submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` 与已覆盖的 `submission/trajectories/L*_FactorySorting*.json` 离线客观分均为 **100/100**（L3 aux_input_1 / L5 aux_output_1，无 collision）。明细见 `score_baseline.json`。
+- 历史备注：同步当周曾短暂以 **19/100** 为旧松散轨迹基线；该口径已作废，勿再引用为当前交付分。
+- Biendata **排行榜是否已显示 100** 必须以平台最后一次上传为准（本地 100 ≠ 已上榜）。
 
-## 提分关键（需 DSW 重跑）
+## 提分关键（已完成 regen；保留备查）
 
-1. **L3**：必须抓 `blue_tote_*` 于 `aux_input_1`，放到 `output_5`
-2. **L5**：放到 `aux_output_1`（不是 `output_6`）
-3. **L2/L4**：真正落到台面（`dist<0.80` 且合理 z），降低 `has_collision`
+1. **L3**：必须抓 `blue_tote_*` 于 `aux_input_1`，放到 `output_5` — ✅ 已在 100 zip 中满足
+2. **L5**：放到 `aux_output_1`（不是 `output_6`）— ✅ 已在 100 zip 中满足
+3. **L2/L4**：真正落到台面（`dist<0.80` 且合理 z），降低 `has_collision` — ✅ zip 五关 `collision=False`
 
 ```bash
 cd JCIIOT
@@ -34,3 +36,7 @@ bash tools/dsw_regen_trajectories.sh
 ```
 
 Windows 本机 MuJoCo/BC eval 环境不完整，请勿用失败重跑覆盖已有轨迹（脚本已加失败回滚保护）。
+
+## Addendum（2026-08-01）合规诚实说明
+
+HEAD 已修改 Manual 禁止/灰区路径（至少 `robosuite_backend.py`、`robot.py`，以及上游同步的 `task_config.json` / `app.py`）。附着为 **contact-gated**（fingerpad 接触后再 attachment），降低假吸箱观感，但**不消除**代码审计风险。详见 `submission/compliance/COMPLIANCE.md`。

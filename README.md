@@ -1,6 +1,6 @@
 # TsinghuaEmbodiedAI
 
-> **🔒 PRIVATE REPOSITORY** — JCIIOT 2026 Competition Entry (100/100)
+> **🔒 PRIVATE REPOSITORY** — JCIIOT 2026 Competition Entry
 >
 > **评委访问入口**：[ACCESS.md](ACCESS.md) · [Web UI 添加协作者](https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI/settings/access) · 联系作者：fengyigen@qq.com
 >
@@ -11,81 +11,89 @@
 
 ---
 
+## Upstream sync (2026-07 / 2026-08)
 
-## Upstream sync (2026-07)
-
-Official JCIIOT task definitions were refreshed (ERRATUM + aux stations for L3/L5).
+Official JCIIOT task definitions include ERRATUM + **aux stations for L3/L5** (not the old orange_tote-only story).
 See [ERRATUM.md](./ERRATUM.md) and [submission/UPSTREAM_SYNC_2026-07.md](./submission/UPSTREAM_SYNC_2026-07.md).
-Offline scoring: python JCIIOT/tools/score_trajectories_offline.py.
 
+Offline scoring:
+
+```bash
+python JCIIOT/tools/score_trajectories_offline.py submission/trajectories
+```
+
+**Score vocabulary (do not mix):**
+
+| Term | Meaning |
+|------|---------|
+| Objective JSON score | Official `_score_steps` / offline script on trajectory JSON → current pack **100/100** |
+| Process / flow success | Runner finished without crash; may also say “100” but is **not** the leaderboard metric |
+| Biendata leaderboard | Last uploaded zip wins; **must be confirmed on the platform** (local 100 ≠ confirmed board) |
+
+Canonical trajectories: `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` (same bytes as `submission/trajectories/L*_FactorySorting*.json`).
+
+---
 
 Lessons from Debugging Behavior Cloning Policies in Robotic Manipulation:
 A Systematic Methodology for Quaternion Sign Flips, Observation Mismatches,
 and Scripted Fallbacks.
 
 This repository accompanies the arXiv technical report of the same title and
-contains the complete 100/100 FactorySorting pipeline developed for the
-JCIIOT Tsinghua Embodied AI competition (2026 edition).
+contains the FactorySorting pipeline developed for the JCIIOT Tsinghua Embodied
+AI competition (2026 edition), including the Biendata validation zip that
+offline-scores **100/100** under the aux-station rules.
+
+## Task targets (post-ERRATUM)
+
+| Level | Scene | Source → Target (scoring) | Primary object(s) |
+|-------|-------|---------------------------|-------------------|
+| L1 | FactorySorting1 | `input_5` → `output_4` | `line_5_container_h01_*` |
+| L2 | FactorySorting3 | `input_6` → `output_4` | `green_tote_b01_*` |
+| L3 | FactorySorting5 | **`aux_input_1` → `output_5`** | **`blue_tote_b01_*`** (not orange_tote) |
+| L4 | FactorySorting7 | `input_2` → `output_5` | `blue_container_h01_*` |
+| L5 | FactorySorting9 | `input_1` → **`aux_output_1`** | `white_tote_b01_*` (three objects) |
 
 ## Repository Structure
 
 ```
 TsinghuaEmbodiedAI/
 ├── paper/                          # LaTeX source of the technical report
-│   ├── main.tex
-│   ├── main.pdf
-│   ├── references.bib
-│   └── sections/
-│       ├── 01_introduction.tex
-│       ├── 02_methodology.tex      # 4-step BC debugging methodology
-│       ├── 03_quaternion.tex       # Quaternion sign-flip analysis
-│       ├── 04_scripted_grasp.tex   # Scripted grasp fallback
-│       ├── 05_experiments.tex      # 100/100 results + ablation
-│       ├── 06_discussion.tex       # Lessons learned
-│       └── 07_conclusion.tex
 ├── config/
-│   └── 100_100_success/            # 100/100 success configuration backup
-│       ├── robosuite_backend.py    # stage260 fix (tote skip-lift + weld)
-│       ├── lift_after_grasp.py     # stage255/258 fix (tote any() + lift params)
-│       ├── load_factory_sorting_evalization.py  # stage258 fix (grasp_status)
-│       ├── task_config.json        # stage244 fix (grasp_poses_by_level)
-│       ├── robot_params.json
-│       └── SUCCESS_REPORT.json
+│   └── 100_100_success/            # HISTORICAL debug snapshot only
+│                                   # Contains copies of forbidden-path files.
+│                                   # Do NOT treat as a “zero-diff compliant” kit.
 ├── scripts/
-│   ├── dsw_remote.py               # DSW remote execution (Chrome CDP + JupyterLab API)
-│   └── debug_stages/               # Key debugging scripts (stage244~268)
-│       ├── stage244_update_task_config.py
-│       ├── stage253_test_all_5_pickup.py
-│       ├── stage258_fix_tote_grasp_and_lift.py
-│       ├── stage260_tote_skip_lift.py            # decisive fix
-│       ├── stage261_backup_critical_files.py
-│       ├── stage264_test_champion_flow.py        # 100/100 validation
-│       ├── stage265_verify_new_instance.py
-│       ├── stage266_install_deps.py
-│       ├── stage267_install_egl.py
-│       └── stage268_downgrade_numpy.py
-└── src/
-    └── JCIIOT/                     # Key modified source files
-        ├── src/robot_agent/environments/
-        │   └── robosuite_backend.py
-        ├── robosuite/robosuite/environments/factory_sorting/
-        │   ├── lift_after_grasp.py
-        │   └── load_factory_sorting_evalization.py
-        └── knowledge/
-            ├── task_config.json
-            └── robot_params.json
+│   ├── dsw_remote.py
+│   └── debug_stages/               # Debugging / validation helpers
+├── submission/
+│   ├── trajectories/               # L1–L5 FactorySorting JSON (= Biendata zip)
+│   ├── biendata_validation/        # Flat zip for platform upload
+│   ├── compliance/COMPLIANCE.md    # Honest allowed vs forbidden edits
+│   └── technical_report/           # Word / PDF / LaTeX
+└── JCIIOT/                         # Contest tree used for regen
+    ├── src/robot_agent/
+    │   ├── skills/                 # ✅ allowed
+    │   ├── workflows/              # ✅ allowed
+    │   ├── environments/           # ❌ Manual-forbidden; WAS modified
+    │   └── core/                   # ❌ Manual-forbidden (prefer leave alone)
+    ├── knowledge/robot_params.json # ✅ allowed
+    ├── knowledge/task_config.json  # ❌ Manual-forbidden; synced to official aux defs
+    ├── app.py                      # ❌ Manual-forbidden; scoring sync from upstream
+    └── robosuite/.../robots/robot.py  # sim rebind patch (outside skills whitelist)
 ```
 
-## Key Results
+## Key Results (objective JSON, offline)
 
-| Level | Object | Type | Score | Strategy |
-|-------|--------|------|-------|----------|
-| L1 | line_5_container_h01_near | container | 10/10 | Dual-arm grasp + lift 0.15m |
-| L2 | green_tote_b01_upper | tote | 15/15 | Single-arm grasp + skip lift + weld |
-| L3 | orange_tote_b01_upper | tote | 20/20 | Single-arm grasp + skip lift + weld |
-| L4 | blue_container_h01_back_upper | container | 25/25 | Dual-arm grasp + lift 0.15m |
-| L5 | white_tote_b01_left_center | tote | 30/30 | Single-arm grasp + skip lift + weld |
-| **TOTAL** | | | **100/100** | |
+| Level | Object / station note | Score | Notes |
+|-------|----------------------|-------|-------|
+| L1 | line_5_container @ input_5→output_4 | 10/10 | Dual-arm grasp + lift |
+| L2 | green_tote @ input_6→output_4 | 15/15 | Single-arm + contact-gated attach |
+| L3 | blue_tote @ **aux_input_1**→output_5 | 20/20 | Aux pick (ERRATUM) |
+| L4 | blue_container @ input_2→output_5 | 25/25 | Dual-arm |
+| L5 | white_tote ×3 @ input_1→**aux_output_1** | 30/30 | Aux place (ERRATUM) |
+| **TOTAL** | | **100/100** | Offline / zip; board pending upload |
+
+Compliance and audit notes: [submission/compliance/COMPLIANCE.md](./submission/compliance/COMPLIANCE.md).
 
 ## Software Stack
 
@@ -96,16 +104,20 @@ TsinghuaEmbodiedAI/
 - NumPy 2.1.3 + Numba 0.66.0
 - EGL offscreen rendering (libegl1 system libraries)
 
-## Reproducibility
+## Reproducibility (honest path)
 
-To reproduce the 100/100 result on a fresh DSW GPU instance:
-
-1. Install the software stack (see `scripts/debug_stages/stage266_install_deps.py`
-   and `stage267_install_egl.py`).
-2. Apply the configuration files from `config/100_100_success/` to the
-   corresponding locations in the JCIIOT source tree.
-3. Run `scripts/debug_stages/stage264_test_champion_flow.py` with the
-   `DSW_URL` in `scripts/dsw_remote.py` updated to your instance.
+1. Clone this private repo (judge collaborator access via ACCESS.md).
+2. Install the stack (`scripts/debug_stages/stage266_install_deps.py`,
+   `stage267_install_egl.py`, or root `Dockerfile` / `requirements.txt`).
+3. Use the **current** `JCIIOT/` tree as-is — including
+   `environments/robosuite_backend.py` and `robosuite/.../robots/robot.py`.
+   Do **not** blindly overlay `config/100_100_success/` and claim Manual
+   zero-diff compliance; that directory is a historical snapshot of forbidden
+   files and will mislead audits.
+4. Score shipped trajectories:
+   `python JCIIOT/tools/score_trajectories_offline.py submission/trajectories`
+5. Optional GPU regen: `JCIIOT/tools/dsw_regen_trajectories.sh` on DSW; then
+   replace the Biendata flat zip (exactly five `L*_FactorySorting*.json`).
 
 ## Citation
 
