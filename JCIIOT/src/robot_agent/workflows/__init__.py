@@ -10,6 +10,7 @@
 # alter scoring, physics, or trajectory content.
 try:
     import mujoco as _mjc
+    import numpy as _np
 
     if not getattr(_mjc, "_jciiot_fullM_patched", False):
         _orig_fullM = _mjc.mj_fullM
@@ -32,23 +33,41 @@ try:
 
             setattr(_mjc, _fn_name, _wrap)
 
-        def _compat_fullM(m, second, third):
+        # mujoco>=3.1 removed MjData.qM; robosuite still reads it as the 3rd
+        # arg to legacy mj_fullM. Provide a harmless dense/sparse placeholder
+        # so attribute access does not raise before our mj_fullM shim runs.
+        if not hasattr(_mjc.MjData, "qM"):
+            def _qM_prop(self):
+                nM = int(getattr(self.model, "nM", 0) or 0)
+                return _np.zeros(nM, dtype=_np.float64)
+
+            _mjc.MjData.qM = property(_qM_prop)
+
+        def _compat_fullM(m, second, third=None):
             # New signature: (MjModel, MjData, dst)
             if isinstance(second, _mjc.MjData):
                 return _orig_fullM(m, second, third)
             # Legacy robosuite signature: (MjModel, dst(ndarray), qM(ndarray))
             dst = second
             data = _model_to_data.get(id(m))
-            if data is not None:
-                return _orig_fullM(m, data, dst)
-            # Fallback: build a fresh MjData and copy qM in
-            qm = third
-            data = _mjc.MjData(m)
-            data.qM[:] = qm
+            if data is None:
+                data = _mjc.MjData(m)
+                _model_to_data[id(m)] = data
             return _orig_fullM(m, data, dst)
 
         _mjc.mj_fullM = _compat_fullM
         _mjc._jciiot_fullM_patched = True
+
+        # robosuite.utils.binding_utils.MjData copies attrs from mujoco.MjData at
+        # class-definition time. If robosuite was imported before this shim, its
+        # wrapper lacks qM even after we add it on mujoco.MjData — patch wrapper.
+        try:
+            from robosuite.utils import binding_utils as _bu
+
+            if not hasattr(_bu.MjData, "qM"):
+                _bu.MjData.qM = property(lambda self: self._data.qM)
+        except Exception:
+            pass
 except Exception:  # pragma: no cover - never block workflow import
     pass
 

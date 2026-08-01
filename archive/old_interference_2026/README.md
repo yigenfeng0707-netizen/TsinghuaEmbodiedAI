@@ -385,3 +385,39 @@ See [CLEANUP_MANIFEST.md](./round5_post_submission_cleanup/CLEANUP_MANIFEST.md).
 - Documentary skill: `c:\Users\52637\.trae-cn\skills\narrative-photo-documentary\`
 - Project memory: `c:\Users\52637\.trae-cn\memory\projects\-d-APPs-TsinghuaEmbodiedAI\`
 - GitHub remote after cleanup: https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI/tree/main/submission
+
+---
+
+# Archive Update 2026-08-01 (pre-delivery 100/100 objective regen)
+
+Offline objective re-validated at **100/100** (`leaderboard_ref=19`) after FactorySorting
+aux_input / station-target hardening and DSW NAS-isolated regen. Delivery sync goes only to
+personal GitHub remote `mine` (never competition `origin`).
+
+## Deliverables (tracked on `mine/main`)
+
+| Artifact | Path | Notes |
+|----------|------|-------|
+| Biendata flat zip | `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` | ~577 KB; 5× `L*_FactorySorting*.json` |
+| Upload note | `submission/biendata_validation/README_UPLOAD.txt` | last-submission-wins reminder |
+| Score snapshot | `submission/trajectories/score_baseline.json` | total 100/100 |
+| Agent code | `JCIIOT/src/robot_agent/...`, `robot.py`, `robot_params.json`, regen tool | grasp/transport/backend fixes |
+
+## Local-only round 6 residue
+
+See [round6_pre_delivery_100/README.md](./round6_pre_delivery_100/README.md) — name inventory of
+~76 `.trae/temp/_dsw_*` / `_remote_*` / `_sync_*` scratch scripts. Kept gitignored under `.trae/`;
+**do not** upload bulk archive blobs (~GB) to GitHub.
+
+## DSW NAS isolation (do not break)
+
+- Work only under `/mnt/workspace/jciiot/` on the shared NAS.
+- Never write into GOAI / RoboDojo trees on the same instance.
+- Regen + pack skill: `jciiot-dsw-factorysorting-regen`
+- GitHub push skill: `github-sync` (SSH remote `mine`)
+
+## Root hygiene
+
+Kept: `JCIIOT/`, `submission/`, `papers/` (local exclude), `archive/` (README only on git),
+`ERRATUM.md`, competition docs under `competition description/` (gitignored).
+Ignored junk: `JCIIOT/tools/_*.py`, recordings dumps, `__pycache__`, `.trae/`, `*.pth`.

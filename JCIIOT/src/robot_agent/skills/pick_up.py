@@ -197,12 +197,14 @@ class PickUpSkill(BaseSkill):
         # If no pose was supplied by the caller, look up the level-specific
         # base pose from knowledge/robot_params.json → grasp_poses_by_object.
         # This replaces the stage244 task_config.json modification.
-        if initial_base_pose is None and object_name:
+        # Prefer calibrated per-object poses from robot_params over any
+        # station-keyed pose (task_config input_N can be in the wrong aisle).
+        if object_name:
             looked_up = lookup_grasp_pose_by_object(object_name)
             if looked_up is not None:
                 initial_base_pose = looked_up
                 logger.info(
-                    "pick_up: looked up grasp pose from robot_params.json for %r: %s",
+                    "pick_up: using robot_params.json grasp pose for %r: %s",
                     object_name, initial_base_pose,
                 )
         target = raw_target

@@ -1,0 +1,228 @@
+{
+  "rule": "official_json_objective_v1_alternate_objects_aux_stations",
+  "total": 100,
+  "max": 100,
+  "leaderboard_ref": 19,
+  "gap_vs_leaderboard": 81,
+  "results": [
+    {
+      "level": "L1",
+      "file": "L1_FactorySorting1_3FO3ERFHISEM.json",
+      "total": 10,
+      "max": 10,
+      "grasp_success": true,
+      "grasped_object": "line_5_container_h01_near",
+      "scored_object": "line_5_container_h01_near",
+      "final_xyz": [
+        -0.147678,
+        -7.290829,
+        1.017495
+      ],
+      "dx_src": 7.333678,
+      "dy_src": 11.228829,
+      "dist_tgt": 0.018340744941250327,
+      "left_ok": true,
+      "place_ok": true,
+      "collision": false,
+      "source": "input_5",
+      "target": "output_4",
+      "objects": [
+        "line_5_container_h01_near",
+        "line_5_container_h01_far"
+      ],
+      "src_xy": [
+        7.186,
+        3.938
+      ],
+      "tgt_xy": [
+        -0.166,
+        -7.29
+      ],
+      "tgt_z": 1.09
+    },
+    {
+      "level": "L2",
+      "file": "L2_FactorySorting3_3FO3ERRPH7X9.json",
+      "total": 15,
+      "max": 15,
+      "grasp_success": true,
+      "grasped_object": "green_tote_b01_upper",
+      "scored_object": "green_tote_b01_upper",
+      "final_xyz": [
+        -0.17381,
+        -7.373667,
+        1.292976
+      ],
+      "dx_src": 12.110809999999999,
+      "dy_src": 11.305667,
+      "dist_tgt": 0.08403072645764778,
+      "left_ok": true,
+      "place_ok": true,
+      "collision": false,
+      "source": "input_6",
+      "target": "output_4",
+      "objects": [
+        "green_tote_b01_upper",
+        "green_tote_b01_lower"
+      ],
+      "src_xy": [
+        11.937,
+        3.932
+      ],
+      "tgt_xy": [
+        -0.166,
+        -7.29
+      ],
+      "tgt_z": 1.09
+    },
+    {
+      "level": "L3",
+      "file": "L3_FactorySorting5_3FO3ERTPXEUT.json",
+      "total": 20,
+      "max": 20,
+      "grasp_success": true,
+      "grasped_object": "blue_tote_b01_far_right",
+      "scored_object": "blue_tote_b01_far_right",
+      "final_xyz": [
+        4.686756,
+        -7.190308,
+        1.380175
+      ],
+      "dx_src": 4.542756,
+      "dy_src": 15.663308,
+      "dist_tgt": 0.19827430090659762,
+      "left_ok": true,
+      "place_ok": true,
+      "collision": false,
+      "source": "aux_input_1",
+      "target": "output_5",
+      "objects": [
+        "blue_tote_b01_far_right",
+        "blue_tote_b01_near_right"
+      ],
+      "src_xy": [
+        0.144,
+        8.473
+      ],
+      "tgt_xy": [
+        4.872,
+        -7.261
+      ],
+      "tgt_z": 1.09
+    },
+    {
+      "level": "L4",
+      "file": "L4_FactorySorting7_3FO3ERFKY9RN.json",
+      "total": 25,
+      "max": 25,
+      "grasp_success": true,
+      "grasped_object": "blue_container_h01_back_upper",
+      "scored_object": "blue_container_h01_back_upper",
+      "final_xyz": [
+        4.962152,
+        -7.266731,
+        1.217968
+      ],
+      "dx_src": 14.723151999999999,
+      "dy_src": 12.276731,
+      "dist_tgt": 0.09033397735625262,
+      "left_ok": true,
+      "place_ok": true,
+      "collision": false,
+      "source": "input_2",
+      "target": "output_5",
+      "objects": [
+        "blue_container_h01_back_upper",
+        "blue_container_h01_back_lower"
+      ],
+      "src_xy": [
+        -9.761,
+        5.01
+      ],
+      "tgt_xy": [
+        4.872,
+        -7.261
+      ],
+      "tgt_z": 1.09
+    },
+    {
+      "total": 30,
+      "max": 30,
+      "collision": false,
+      "items": [
+        {
+          "label": "leave white_tote_b01_left_center",
+          "score": 5,
+          "ok": true
+        },
+        {
+          "label": "place white_tote_b01_left_center",
+          "score": 5,
+          "ok": true
+        },
+        {
+          "label": "leave white_tote_b01_left_front",
+          "score": 5,
+          "ok": true
+        },
+        {
+          "label": "place white_tote_b01_left_front",
+          "score": 5,
+          "ok": true
+        },
+        {
+          "label": "leave white_tote_b01_left_back",
+          "score": 5,
+          "ok": true
+        },
+        {
+          "label": "place white_tote_b01_left_back",
+          "score": 5,
+          "ok": true
+        }
+      ],
+      "details": [
+        {
+          "object": "white_tote_b01_left_center",
+          "grasped": true,
+          "left_ok": true,
+          "placed_ok": true,
+          "dist_tgt": 0.17999999999999972,
+          "final": [
+            0.144,
+            8.653,
+            1.353
+          ]
+        },
+        {
+          "object": "white_tote_b01_left_front",
+          "grasped": true,
+          "left_ok": true,
+          "placed_ok": true,
+          "dist_tgt": 0.41761226035642235,
+          "final": [
+            0.544,
+            8.353,
+            1.353
+          ]
+        },
+        {
+          "object": "white_tote_b01_left_back",
+          "grasped": true,
+          "left_ok": true,
+          "placed_ok": true,
+          "dist_tgt": 0.41761226035642235,
+          "final": [
+            -0.256,
+            8.353,
+            1.353
+          ]
+        }
+      ],
+      "source": "input_1",
+      "target": "aux_output_1",
+      "level": "L5",
+      "file": "L5_FactorySorting9_3FO3ERT2C5FP.json"
+    }
+  ]
+}

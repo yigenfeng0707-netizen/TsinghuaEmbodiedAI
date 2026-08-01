@@ -230,6 +230,19 @@ class Robot(object):
             sim (MjSim): New simulation being instantiated to replace the old one
         """
         self.sim = sim
+        # hard_reset calls MjSim.free() which deletes .data on the old sim.
+        # Controllers keep their own sim handle from construction time — rebind
+        # them to the live sim or update_state() raises AttributeError: no data.
+        cc = getattr(self, "composite_controller", None)
+        if cc is not None:
+            cc.sim = sim
+            for part in getattr(cc, "part_controllers", {}).values():
+                if hasattr(part, "sim"):
+                    part.sim = sim
+        configs = getattr(self, "part_controller_config", None) or {}
+        for cfg in configs.values():
+            if isinstance(cfg, dict) and "sim" in cfg:
+                cfg["sim"] = sim
 
     def reset(self, deterministic=False, rng=None):
         """

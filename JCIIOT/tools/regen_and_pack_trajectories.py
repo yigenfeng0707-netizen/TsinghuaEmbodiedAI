@@ -54,6 +54,8 @@ def _map_paths(level: str) -> tuple[Path, Path]:
 
 def run_level(level: str, *, force: bool = False) -> Path:
     _setup_paths()
+    # Apply mujoco API shim before robosuite so binding_utils.MjData sees qM.
+    from robot_agent import workflows as _workflows_shim  # noqa: F401
     import robosuite as _rs  # noqa: F401
     from robot_agent.environments import robosuite_backend  # noqa: F401
     import robosuite.environments.factory_sorting.load_factory_sorting_evalization as _eval

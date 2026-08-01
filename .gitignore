@@ -62,7 +62,7 @@ dist/
 *.egg-info/
 
 # Local debug / interference residue (keep working tree clean)
-JCIIOT/tools/_*.py
+JCIIOT/tools/_[!_]*.py
 JCIIOT/tools/keepalive.err
 JCIIOT/tools/keepalive.log
 JCIIOT/recordings/*/
@@ -71,5 +71,18 @@ official_repo/
 archive/old_interference_2026/**
 !archive/old_interference_2026/README.md
 competition description/
+papers/
 .trae/
 *.egg-info/
+
+# Large / regenerated local dumps (Biendata zip + score_baseline are tracked intentionally)
+submission/SOP-MapGuard_Final_Submission.zip
+submission/trajectories/*_run_report.json
+submission/videos_v5/audio/
+submission/videos_v5/charts/
+submission/videos_v5/narration/
+submission/videos_v5/photos/
+submission/videos_v5/photos_enhanced/
+submission/videos_v5/segments/
+submission/videos_v5/srt/
+submission/videos_v5/verify/
