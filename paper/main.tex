@@ -8,6 +8,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+\graphicspath{{figures/}}
 \usepackage{xcolor}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -68,7 +69,7 @@
 \maketitle
 
 \begin{abstract}
-Behavior Cloning (BC) is widely adopted for robotic manipulation due to its simplicity and sample efficiency, yet practitioners frequently encounter a perplexing failure mode: the policy achieves very low training loss but fails completely at evaluation time. This technical report distills practical lessons from a semester-long effort to build a championship-level FactorySorting pipeline (5 levels, 100/100 score) on the robosuite + robomimic + MuJoCo stack. We present a systematic 4-step debugging methodology (sanity check, observation comparison, isolation test, transferability test) and identify three root causes of the train-eval gap: (i) non-determinism in EGL offscreen rendering, (ii) quaternion sign flips induced by different robot base poses, and (iii) sign inconsistency across training environments. We further document a subtle and rarely discussed failure mode where the same fix (\code{fix\_quat\_sign}) rescues one task while breaking another. When BC remains unreliable, we describe a deterministic 5-stage scripted grasp fallback that treats container and tote objects differently: dual-arm grasp + physical lift for containers, versus single-arm grasp + weld-to-gripper (skipping lift) for thin-walled totes. The complete pipeline achieves 100/100 on all 5 levels of the FactorySorting benchmark, and we release the diagnostic scripts and configurations as a community resource.
+Behavior Cloning (BC) is widely adopted for robotic manipulation due to its simplicity and sample efficiency, yet practitioners frequently encounter a perplexing failure mode: the policy achieves very low training loss but fails completely at evaluation time. This technical report distills practical lessons from a semester-long effort to deliver a FactorySorting pipeline that scores \textbf{100/100 under the official JSON objective scorer} (L1{=}10, L2{=}15, L3{=}20, L4{=}25, L5{=}30; collision $-5$) on the robosuite + robomimic + MuJoCo stack. We present a systematic 4-step debugging methodology (sanity check, observation comparison, isolation test, transferability test) and identify three root causes of the train-eval gap: (i) non-determinism in EGL offscreen rendering, (ii) quaternion sign flips induced by different robot base poses, and (iii) sign inconsistency across training environments. When BC remains unreliable at deployment, we fall back to a deterministic scripted grasp/transport pipeline, then harden it against official scoring and upstream task errata: object-keyed grasp poses from \code{robot\_params}, near-wall single-arm tote clamping with deeper settle, contact-gated transport attachment, sim rebind after \code{hard\_reset}, navigation arm tuck, and an L5 multi-object loop to \code{aux\_output\_1}. We distinguish this objective score from mere ``process success,'' note Biendata last-upload-wins ranking, and honestly disclose necessary runtime edits outside the Manual whitelist. Diagnostic scripts and configurations are released as a community resource.
 \end{abstract}
 
 % ============== Sections ==============
@@ -77,6 +78,7 @@ Behavior Cloning (BC) is widely adopted for robotic manipulation due to its simp
 \input{sections/03_quaternion}
 \input{sections/04_scripted_grasp}
 \input{sections/05_experiments}
+\input{sections/08_novelty}
 \input{sections/06_discussion}
 \input{sections/07_conclusion}
 
