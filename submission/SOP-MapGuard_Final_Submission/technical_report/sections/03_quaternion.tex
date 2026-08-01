@@ -1,0 +1,138 @@
+\section{The Quaternion Sign-Flip Problem}
+\label{sec:quaternion}
+
+The single most insidious bug we encountered was the quaternion sign flip. This section analyzes the problem in detail, including a rarely documented failure mode where a single fix rule rescues one task while breaking another.
+
+\subsection{Background: Quaternion Double Cover}
+\label{sec:quaternion:background}
+
+Unit quaternions $\quat \in \mathbb{S}^3$ are a popular parameterization of 3D rotations. They enjoy a fundamental \emph{double cover} property: $\quat$ and $-\quat$ represent the \emph{same} rotation. Algebraically, this is obvious; numerically, however, it creates a subtle trap for learned policies.
+
+A neural network $\pi_\theta(\mathbf{o})$ maps observations to actions. When the observation $\mathbf{o}$ contains a quaternion $\quat$, the network sees $\quat$ as a 4-dimensional vector and is sensitive to its sign. If the network is trained exclusively on observations with $\quat_0 \geq 0$, it has never seen the $-\quat$ representation and may produce arbitrary outputs when evaluated on $-\quat$.
+
+\subsection{Symptom: Low Training Loss, Zero Evaluation Success}
+\label{sec:quaternion:symptom}
+
+In our experiments, a BC\_RNN policy trained for 800 epochs reached a training loss of $1.5 \times 10^{-5}$, indicating near-perfect fitting of the demonstration data. Yet when evaluated in the same simulator, the policy produced actions that drove the end-effector away from the target object, achieving 0\% grasp success.
+
+Applying the methodology of Section~\ref{sec:methodology}, we found:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Step 1 (sanity check):} passed. The policy produced reasonable actions on training observations.
+    \item \textbf{Step 2 (obs compare):} the key \code{robot0\_right\_eef\_quat} had a maximum absolute difference of $1.42$ between the environment and the training data. All other keys differed by less than $0.001$.
+    \item \textbf{Step 3 (isolation):} replacing only \code{robot0\_right\_eef\_quat} degraded the policy output, confirming it as the root cause.
+\end{itemize}
+
+The numerical values were:
+\begin{align}
+\quat_{\text{env}}    &= [+0.71, +0.00, -0.71, +0.00], \label{eq:quat_env} \\
+\quat_{\text{train}}  &= [-0.71, -0.00, +0.71, -0.00] = -\quat_{\text{env}}. \label{eq:quat_train}
+\end{align}
+
+Equations~\eqref{eq:quat_env}--\eqref{eq:quat_train} make the sign flip explicit: the environment produces $\quat_{\text{env}}$ while the training data contains $-\quat_{\text{env}}$. Both represent the same rotation, but the policy was trained only on the $-$ variant.
+
+\subsection{Root Cause: Different Robot Base Poses}
+\label{sec:quaternion:root_cause}
+
+The sign of the quaternion produced by robosuite's forward kinematics depends on the robot's base position and orientation. In our benchmark, the robot base positions differ across tasks:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item Task L1: \code{robot\_base\_pos = [8.0, 4.6, 0.0]}
+    \item Task L3: \code{robot\_base\_pos = [8.0, 4.0, 0.0]}
+\end{itemize}
+
+Although both tasks use the same robot model and the same initial joint configuration, the different base positions induce slightly different end-effector poses, and the quaternion sign flips between them. This is a deterministic property of the forward kinematics, not a numerical artifact.
+
+\subsection{The First Fix: Enforce $\quat_0 \geq 0$}
+\label{sec:quaternion:first_fix}
+
+The textbook fix is to enforce a canonical sign convention, e.g., require the first component to be non-negative:
+
+\begin{lstlisting}[caption={Sign canonicalization: enforce $\quat_0 \geq 0$.}]
+def fix_quat_sign(quat):
+    """Canonicalize quaternion sign: q[0] >= 0."""
+    if quat[0] < 0:
+        return -quat
+    return quat
+
+# Apply at evaluation time
+for k in list(obs.keys()):
+    if 'quat' in k and 'eef' in k:
+        obs[k] = fix_quat_sign(obs[k])
+\end{lstlisting}
+
+Applied to task L1, this fix immediately restored grasp success: the end-effector distance to target dropped from $>0.1\,\mathrm{m}$ to $0.0014\,\mathrm{m}$, and all four fingerpads made contact with the object. We briefly believed the bug was solved.
+
+\subsection{The Hidden Trap: Cross-Environment Sign Inconsistency}
+\label{sec:quaternion:trap}
+
+The surprise came when we applied the same \code{fix\_quat\_sign} to task L3. Instead of fixing the policy, the fix \emph{broke} it: a policy that worked without the fix now failed with it.
+
+The reason, discovered by re-running Step 2 of the methodology on L3, is that the L3 training data already had $\quat_0 < 0$. That is:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item L1 training data: $\quat_0 \geq 0$. The environment produces $\quat_0 < 0$. The fix is required.
+    \item L3 training data: $\quat_0 < 0$. The environment produces $\quat_0 < 0$. The fix is harmful.
+\end{itemize}
+
+The same \code{fix\_quat\_sign} rule therefore has opposite effects on the two tasks. There is no universal rule; the sign convention must match whatever was present in the training data.
+
+\subsection{Diagnostic: Compare Against the Training Data}
+\label{sec:quaternion:diagnostic}
+
+To determine whether the fix should be applied, we compare the environment's quaternion against the training data's quaternion directly:
+
+\begin{lstlisting}[caption={Diagnostic: detect sign consistency between env and training data.}]
+def diagnose_quat_sign(train_hdf5, env):
+    import h5py
+    with h5py.File(train_hdf5, 'r') as f:
+        train_quat = f['data/demo_0/obs/robot0_right_eef_quat'][0]
+    env_quat = env.get_observation()['robot0_right_eef_quat']
+
+    diff_same = np.abs(env_quat - train_quat).max()
+    diff_flip = np.abs(env_quat + train_quat).max()
+
+    if diff_same < 0.01:
+        return "SAME_SIGN"   # do not apply fix
+    elif diff_flip < 0.01:
+        return "FLIPPED"      # apply fix_quat_sign
+    else:
+        return "MISMATCH"     # investigate further
+\end{lstlisting}
+
+This diagnostic returns one of three labels:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \texttt{SAME\_SIGN}: the environment and training data agree; do not apply the fix.
+    \item \texttt{FLIPPED}: the environment and training data disagree by a sign; apply \code{fix\_quat\_sign}.
+    \item \texttt{MISMATCH}: the difference is not a pure sign flip; investigate further (e.g., the wrong demonstration file was loaded).
+\end{itemize}
+
+\subsection{Experimental Validation}
+\label{sec:quaternion:validation}
+
+Table~\ref{tab:quat_results} summarizes the per-task diagnosis and outcome. The single policy trained on L3 transferred directly to L5, L7, and L9 because those tasks share the same object position, grasp site, and robot base position.
+
+\begin{table}[h]
+\centering
+\caption{Quaternion sign diagnosis and grasp success across tasks.}
+\label{tab:quat_results}
+\small
+\begin{tabular}{l l l l l}
+\toprule
+\textbf{Task} & \textbf{Train quat sign} & \textbf{Apply fix?} & \textbf{EEF dist (m)} & \textbf{Grasp success} \\
+\midrule
+L1 & $\quat_0 \geq 0$ & Yes & 0.0014 & \checkmark \\
+L3 & $\quat_0 < 0$  & No  & 0.0014 & \checkmark \\
+L5 (transfer from L3) & $\quat_0 < 0$ & No & 0.0014 & \checkmark \\
+L7 (transfer from L3) & $\quat_0 < 0$ & No & 0.0014 & \checkmark \\
+L9 (transfer from L3) & $\quat_0 < 0$ & No & 0.0014 & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Discussion}
+\label{sec:quaternion:discussion}
+
+The quaternion sign-flip problem is, in hindsight, an elementary consequence of the double cover property. Yet it is rarely discussed in the imitation learning literature, perhaps because published benchmarks typically use a single robot configuration and the sign is consistent by construction. The moment one scales to multiple tasks with different base poses, the problem becomes acute and is remarkably easy to miss: the training loss gives no warning, and the failure manifests as a completely silent zero-success rate.
+
+The cross-environment sign inconsistency (Section~\ref{sec:quaternion:trap}) is, to our knowledge, not previously documented. It is particularly dangerous because a fix that works on one task actively harms another, and there is no way to detect this without running the diagnostic of Section~\ref{sec:quaternion:diagnostic}.
+
+We recommend that all BC training pipelines for robotic manipulation include a sign-consistency check between the demonstration data and the evaluation environment, applied per task rather than globally.

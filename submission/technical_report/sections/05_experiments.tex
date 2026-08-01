@@ -142,7 +142,7 @@ L5 & 3$\times$ white tote @ input\_1$\rightarrow$aux\_output\_1 & 30/30 & Multi-
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/fig5_5level_scores.png}
-    \caption{Per-level official objective scores on FactorySorting after ERRATUM-aligned regen. All 5 levels achieve the maximum (10/15/20/25/30), totaling 100/100. Figures generated earlier in the project remain directionally correct; task labels for L3/L5 follow Table~\ref{tab:benchmark}.}
+    \caption{Per-level official objective scores on FactorySorting after ERRATUM-aligned regen. All 5 levels achieve the maximum (L1{=}10, L2{=}15, L3{=}20, L4{=}25, L5{=}30), totaling 100/100. Bar labels show current objects/routes (L3 blue tote @ \code{aux\_input\_1}; L5 multi white tote @ \code{aux\_output\_1}).}
     \label{fig:5level_scores}
 \end{figure}
 
@@ -182,7 +182,7 @@ Baseline (BC policy, no fixes) & 0/100 & Train-eval gap (quat + EGL). \\
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/fig7_ablation.png}
-    \caption{Historical ablation figure from the BC$\rightarrow$scripted-grasp phase. Interpret alongside Table~\ref{tab:ablation}: the final 100/100 objective delivery also required pose, ERRATUM station, contact-gated attach, sim-rebind, and nav-tuck fixes beyond skip-lift alone.}
+    \caption{(a)~Final official objective per level (reported zip). (b)~Historical BC$\rightarrow$scripted debug checkpoints from an earlier campaign---single-run narrative scores, \emph{not} a claim that skip-lift alone yields 100 under current ERRATUM tasks. Interpret alongside Table~\ref{tab:ablation}: final delivery also required object-keyed poses, aux stations, contact-gated attach, sim-rebind, and nav-tuck.}
     \label{fig:ablation}
 \end{figure}
 

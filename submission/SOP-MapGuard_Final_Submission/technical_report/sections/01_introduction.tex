@@ -1,0 +1,26 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Behavior Cloning (BC) is the simplest form of imitation learning: supervise a neural network on expert demonstrations and deploy it directly. Despite its conceptual simplicity, practitioners routinely observe a puzzling phenomenon where the trained policy achieves very low training loss yet completely fails at evaluation time. This \emph{train-eval gap} is particularly common when the demonstration data and the evaluation environment are not perfectly aligned, which is the rule rather than the exception in modern robotic manipulation pipelines built on top of physics simulators such as MuJoCo~\cite{todorov2012mujoco}.
+
+The canonical recipe for BC on robotic manipulation is well established: collect demonstrations with a scripted policy~\cite{robosuite}, train a recurrent BC variant~\cite{robomimic} on low-dimensional observations (end-effector pose and gripper state), and evaluate by rolling out the policy in the same simulator. When this recipe fails, however, the debugging literature is surprisingly sparse. Most published work reports only the final success rate and gives little guidance on what to do when the success rate is zero.
+
+This technical report fills that gap. We document the iterative debugging process that led to a FactorySorting delivery scoring \textbf{100/100 under the official JSON objective rule} (grasp\_end + leave with $|\Delta x|$ or $|\Delta y|>1$ + place with distance $<0.80$; collision $-5$) on the JCIIOT Tsinghua Embodied AI benchmark~\cite{jciiot2026}. Process-level ``all skills returned success'' is \emph{not} the same metric; early trajectories that ignored upstream station/object errata could look successful yet score poorly offline. The pipeline is built on robosuite 1.5.2~\cite{robosuite}, robomimic~\cite{robomimic}, and MuJoCo 3.10~\cite{todorov2012mujoco}, and the robot platform is a dual-arm Tiago with parallel-jaw grippers. Along the way we identified three concrete root causes of the train-eval gap that, in our experience, are under-documented in the literature:
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Non-deterministic EGL offscreen rendering.} MuJoCo's EGL backend produces pixel-level differences ($\approx 1.9\%$ mean absolute error) between training-data collection and evaluation, even with identical scene configurations. BC policies overfit to these subtle pixel differences.
+    \item \textbf{Quaternion sign flips across robot base poses.} Different \code{robot\_base\_pos} values induce different end-effector initial poses, and the resulting quaternions can have opposite signs. Because $\quat$ and $-\quat$ represent the same rotation but are numerically distinct, a BC policy trained on one sign fails catastrophically when evaluated on the other.
+    \item \textbf{Sign inconsistency across training environments.} A single \code{fix\_quat\_sign} rule that enforces $\quat_0 \geq 0$ rescues one task (L1) while breaking another (L3), because the two training datasets have opposite quaternion signs by construction.
+\end{enumerate}
+
+We further report on the engineering decision to abandon BC at deployment time and fall back to a deterministic scripted grasp/transport stack when BC remains unreliable. Closing the official objective score then required additional, audit-aware engineering: object-keyed poses (not wrong station defaults), near-wall tote clamp with deeper settle / fingerpad contact, contact-gated transport attachment with lift retention when dual-arm contact is lost on one side, MuJoCo sim rebind after \code{hard\_reset}, navigation arm tuck to avoid collisions, and L5 multi-object placement at \code{aux\_output\_1} with staging clear of the production line. Upstream ERRATUM sync corrected L3 to \code{aux\_input\_1}/blue tote $\rightarrow$ \code{output\_5} and L5 to \code{input\_1} $\rightarrow$ \code{aux\_output\_1}.
+
+\paragraph{Contributions.} Our contributions are practical rather than algorithmic:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item A 4-step BC debugging methodology (Section~\ref{sec:methodology}) that isolates policy-side bugs from observation-side bugs.
+    \item A detailed case study of the quaternion sign-flip problem (Section~\ref{sec:quaternion}), including the rarely documented \emph{cross-environment sign inconsistency} failure mode.
+    \item A scripted grasp fallback with object-type-aware logic (Section~\ref{sec:scripted_grasp}), including contact-gated tote transport attachment under official scoring.
+    \item An end-to-end FactorySorting pipeline (Section~\ref{sec:experiments}) that reaches 100/100 objective points on all 5 levels after ERRATUM-aligned regen, with diagnostic scripts released as a community resource.
+\end{itemize}
+
+The remainder of this report is organized as follows. Section~\ref{sec:methodology} presents the debugging methodology. Section~\ref{sec:quaternion} analyzes the quaternion sign-flip problem. Section~\ref{sec:scripted_grasp} describes the scripted grasp fallback. Section~\ref{sec:experiments} reports experimental results. Section~\ref{sec:discussion} discusses lessons learned, and Section~\ref{sec:conclusion} concludes.

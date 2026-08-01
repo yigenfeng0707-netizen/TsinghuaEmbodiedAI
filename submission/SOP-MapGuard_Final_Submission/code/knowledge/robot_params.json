@@ -1,0 +1,96 @@
+{
+  "_comment": "=== Robot Execution Parameters === 选手可调整此文件来优化机器人性能，重启 app.py 后生效。碰撞检测参数不在此文件中，不可调整。",
+  "llm": {
+    "_comment": "LLM 大模型配置 —— 控制任务规划和视觉理解的模型接入",
+    "ollama_base_url": "http://localhost:11434",
+    "ollama_model": "qwen3.6:27b-mtp-q4_K_M",
+    "vision_model": "GLM-5V-Turbo",
+    "openai_base_url": "https://api.deepseek.com",
+    "openai_model": "deepseek-chat"
+  },
+  "navigation": {
+    "_comment": "导航参数 —— 控制底盘移动的速度、精度和模式",
+    "max_steps": 3000,
+    "waypoint_tolerance": 0.01,
+    "settle_steps": 5,
+    "max_linear": 0.70,
+    "max_angular": 1.20,
+    "k_linear": 1.2,
+    "k_angular": 1.8,
+    "holonomic_base": true,
+    "yaw_control": false,
+    "turn_in_place_angle": 0.65,
+    "drive_mode": "direct",
+    "control_freq": 20
+  },
+  "grasp_policy": {
+    "_comment": "BC 抓取策略参数 —— 控制基于行为克隆的抓取执行",
+    "checkpoint_path": "robosuite/robosuite/model_epoch_150.pth",
+    "eval_steps": 360,
+    "post_hold_steps": 5,
+    "initial_view_steps": 5,
+    "debug_policy": false,
+    "debug_every": 25,
+    "record_frame_interval": 5
+  },
+  "lift": {
+    "_comment": "抬升参数 —— 抓取后验证物体是否牢固的抬升阶段。tote 物体由 skills/grasp_strategy.py 自动跳过 lift（单臂摩擦力不足）。",
+    "lift_height": 0.15,
+    "max_steps": 300,
+    "hold_steps": 20,
+    "tolerance": 0.02,
+    "max_action": 0.80
+  },
+  "turn": {
+    "_comment": "转向参数 —— 放置前机器人面向目标站的转向控制",
+    "tolerance": 0.02,
+    "max_iters": 8,
+    "turn_steps": 40,
+    "settle_steps": 10
+  },
+  "place": {
+    "_comment": "放置参数 —— 控制物体下放和释放的精细操作",
+    "lower_delta": 0.18,
+    "lower_steps": 25,
+    "release_steps": 60,
+    "release_clearance": 0.04
+  },
+  "grasp_poses_by_object": {
+    "_comment": "关卡专属抓取位姿 —— 替代 task_config.json 的 grasp_poses_by_level（合规：仅修改 robot_params.json）。由 skills/pick_up.py 通过 lookup_grasp_pose_by_object() 读取。位姿来源：stage240 实测验证成功的 robot_base_pos。",
+    "line_5_container_h01_near": {
+      "pos": [8.0, 4.6, 0.0],
+      "yaw": -3.14,
+      "level": "L1",
+      "type": "container",
+      "source": "input_5"
+    },
+    "green_tote_b01_upper": {
+      "pos": [12.81, 4.6, 0.0],
+      "yaw": -3.14,
+      "level": "L2",
+      "type": "tote",
+      "source": "input_6"
+    },
+    "orange_tote_b01_upper": {
+      "pos": [2.26, 5.29, 0.0],
+      "yaw": -3.14,
+      "level": "L3",
+      "type": "tote",
+      "source": "input_6"
+    },
+    "blue_container_h01_back_upper": {
+      "pos": [-8.95, 5.35, 0.0],
+      "yaw": -3.14,
+      "level": "L4",
+      "type": "container",
+      "source": "input_2"
+    },
+    "white_tote_b01_left_center": {
+      "pos": [-13.73, 4.93, 0.0],
+      "yaw": -3.14,
+      "level": "L5",
+      "type": "tote",
+      "source": "input_1"
+    }
+  }
+}

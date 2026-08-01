@@ -1,0 +1,8 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a systematic debugging methodology for the train-eval gap in Behavior Cloning policies for robotic manipulation, grounded in a semester-long FactorySorting effort. The methodology isolates policy-side bugs from observation-side bugs through four steps: sanity check, observation comparison, isolation test, and transferability test.
+
+Applying this methodology, we identified three root causes of the train-eval gap: (i) non-deterministic EGL offscreen rendering, (ii) quaternion sign flips induced by different robot base poses, and (iii) a rarely documented cross-environment sign inconsistency where the same sign-fix rule rescues one task while breaking another. When BC remained unreliable at deployment, we switched to a scripted grasp/transport fallback and then closed the \emph{official JSON objective} score---100/100 (L1{=}10 \ldots L5{=}30)---with object-keyed poses, contact-gated tote attachment, ERRATUM-aligned L3/L5 stations, sim rebind after reset, navigation arm tuck, and an L5 multi-object place loop. We distinguish this objective credit from process-level success and note Biendata last-upload-wins ranking.
+
+The contributions of this report are practical rather than algorithmic. The BC debugging methodology remains the conceptual core; the final delivery connects that methodology to an audit-aware engineering stack under official scoring. We do not claim a pure whitelist-only implementation path. Diagnostic scripts, configurations, and regenerated trajectories are released to support reproducibility and to spare future practitioners repeated weeks of silent train-eval and scorer mismatches.

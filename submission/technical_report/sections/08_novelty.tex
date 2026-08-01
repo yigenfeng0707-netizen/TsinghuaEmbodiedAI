@@ -22,7 +22,7 @@ Competition rules whitelist \code{skills/}, \code{workflows/}, and \code{robot\_
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{figures/fig3_monkey_patch.png}
-    \caption{Runtime monkey-patch from whitelist skills injects tote-aware grasp/lift checks. This is complementary to---not a substitute for---backend/robot runtime fixes required for stable official-score regeneration. See limitations for compliance disclosure.}
+    \caption{Architecture diagram: whitelist skills install a runtime monkey-patch for tote grasp/lift gates, while contact-gated attach, sim rebind, and nav tuck live in necessary \code{robosuite\_backend.py} / \code{robot.py} edits. Presented as one component of an audit-aware stack---not a pure patch-only / zero-forbidden-file claim. See Section~\ref{sec:discussion:limitations}.}
     \label{fig:monkey_patch}
 \end{figure}
 
