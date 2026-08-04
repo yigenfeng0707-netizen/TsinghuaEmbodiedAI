@@ -1,5 +1,7 @@
 # JCIIOT 2026 提交前核对清单
 
+> **状态声明（2026-08-04）**: 本目录是历史打包副本，不能作为当前权威提交说明。当前 validation zip 离线分 **100/100**，物理审计 fail=0/warn=0/ok=5；以仓库根 `README.md`、`submission/README.md`、`submission/PHYSICS_AUDIT.md` 为准。
+
 > **生成时间**: 2026-07-21
 > **仓库**: https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
 > **提交截止**: 2026-08-16 23:59 (北京时间)
@@ -72,7 +74,7 @@
 | 5 | L5 轨迹 | `trajectories/L5_FactorySorting9_3FO3ERT2C5FP.json` | — | ✅ | 3× white_tote → aux_output_1 |
 | 6 | 客观分基线 | 仓库 `submission/trajectories/score_baseline.json` | — | ✅ | **100/100** 官方规则离线复算 |
 
-**评分验证**：官方 JSON 客观分 **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30）。旧 **19/100** / orange_tote-as-L3 口径已作废。
+**评分验证**：官方 JSON 客观分 **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30）。旧 **19/100** / orange_tote-as-L3 / 大瞬移 100 口径已作废。
 
 ### 材料 3：技术报告（必交）
 

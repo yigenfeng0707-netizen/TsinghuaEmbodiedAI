@@ -1,5 +1,7 @@
 # JCIIOT 2026 最终提交包 — SOP-MapGuard
 
+> **状态声明（2026-08-04）**: 本目录是历史打包副本，不能作为当前权威提交说明。当前权威状态以仓库根 `README.md`、`submission/README.md`、`submission/PHYSICS_AUDIT.md` 为准：validation zip 离线分 **100/100**，物理审计 fail=0/warn=0/ok=5。
+
 > **提交方**: 冯亦根 (Yigen Feng) · 中国电信股份有限公司杭州分公司 · 队名 **SOP-MapGuard**
 > **比赛**: JCIIOT 2026 工业具身智能挑战赛 — 5 级 FactorySorting
 > **客观分（官方 JSON / 离线复算 / Biendata zip）**: **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；无 collision）
@@ -25,11 +27,11 @@ SOP-MapGuard_Final_Submission/
 │   ├── technical_report.docx / .pdf / _latex_enhanced.pdf
 │   ├── main.tex + sections/ + figures/
 │   └── references.bib
-├── trajectories/                  ← 5× L*_FactorySorting*.json（客观分 100）
+├── trajectories/                  ← 5× L*_FactorySorting*.json（当前客观分 90）
 └── videos/                        ← narration_full.mp4 + compilation.srt
 ```
 
-权威完整代码在仓库根目录 `JCIIOT/`（含必要的 `robosuite_backend.py` / `robot.py` 运行时修复）。本包 `code/` 仅为 whitelist 侧副本，**不能单独复现 100/100**。
+权威完整代码在仓库根目录 `JCIIOT/`（含必要的 `robosuite_backend.py` / `robot.py` 运行时修复）。本包 `code/` 仅为 whitelist 侧副本，**不能单独复现当前 JSON 100/100**。
 
 ---
 

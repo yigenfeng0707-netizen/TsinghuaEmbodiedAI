@@ -16,7 +16,7 @@ https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
    - main.tex + sections/ + figures/（8 张图；fig3/5/7 已按 100/100 与诚实合规刷新）
 
 2. 轨迹文件（trajectories/）
-   - L1~L5 官方模板 JSON；离线客观分 100/100
+   - L1~L5 官方模板 JSON；当前权威包离线客观分 100/100（L5=30/30）
    - L3 = blue_tote @ aux_input_1 → output_5（非 orange_tote）
    - L5 = 3× white_tote @ input_1 → aux_output_1
 
