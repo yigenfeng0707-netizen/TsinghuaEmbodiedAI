@@ -14,13 +14,13 @@
       "grasped_object": "line_5_container_h01_near",
       "scored_object": "line_5_container_h01_near",
       "final_xyz": [
-        -0.147678,
-        -7.290829,
-        1.017495
+        -0.166004,
+        -7.29,
+        1.017981
       ],
-      "dx_src": 7.333678,
-      "dy_src": 11.228829,
-      "dist_tgt": 0.018340744941250327,
+      "dx_src": 7.352004,
+      "dy_src": 11.228,
+      "dist_tgt": 4.000000000004e-06,
       "left_ok": true,
       "place_ok": true,
       "collision": false,
@@ -49,13 +49,13 @@
       "grasped_object": "green_tote_b01_upper",
       "scored_object": "green_tote_b01_upper",
       "final_xyz": [
-        -0.17381,
-        -7.373667,
-        1.292976
+        -0.165984,
+        -7.289993,
+        1.292973
       ],
-      "dx_src": 12.110809999999999,
-      "dy_src": 11.305667,
-      "dist_tgt": 0.08403072645764778,
+      "dx_src": 12.102984,
+      "dy_src": 11.221993,
+      "dist_tgt": 1.7464249196623823e-05,
       "left_ok": true,
       "place_ok": true,
       "collision": false,
@@ -84,13 +84,13 @@
       "grasped_object": "blue_tote_b01_far_right",
       "scored_object": "blue_tote_b01_far_right",
       "final_xyz": [
-        4.686756,
-        -7.190308,
-        1.380175
+        4.872011,
+        -7.261002,
+        1.292975
       ],
-      "dx_src": 4.542756,
-      "dy_src": 15.663308,
-      "dist_tgt": 0.19827430090659762,
+      "dx_src": 4.7280109999999995,
+      "dy_src": 15.734002,
+      "dist_tgt": 1.118033988731401e-05,
       "left_ok": true,
       "place_ok": true,
       "collision": false,
@@ -119,13 +119,13 @@
       "grasped_object": "blue_container_h01_back_upper",
       "scored_object": "blue_container_h01_back_upper",
       "final_xyz": [
-        4.962152,
-        -7.266731,
-        1.217968
+        4.871992,
+        -7.261,
+        1.217974
       ],
-      "dx_src": 14.723151999999999,
-      "dy_src": 12.276731,
-      "dist_tgt": 0.09033397735625262,
+      "dx_src": 14.632991999999998,
+      "dy_src": 12.271,
+      "dist_tgt": 8.000000000230045e-06,
       "left_ok": true,
       "place_ok": true,
       "collision": false,
@@ -187,11 +187,11 @@
           "grasped": true,
           "left_ok": true,
           "placed_ok": true,
-          "dist_tgt": 0.17999999999999972,
+          "dist_tgt": 0.4069483801171837,
           "final": [
-            0.144,
-            8.653,
-            1.353
+            0.455308,
+            8.735096,
+            1.099964
           ]
         },
         {
@@ -199,11 +199,11 @@
           "grasped": true,
           "left_ok": true,
           "placed_ok": true,
-          "dist_tgt": 0.41761226035642235,
+          "dist_tgt": 0.11205560202417411,
           "final": [
-            0.544,
-            8.353,
-            1.353
+            0.056132,
+            8.403461,
+            1.099978
           ]
         },
         {
@@ -211,11 +211,11 @@
           "grasped": true,
           "left_ok": true,
           "placed_ok": true,
-          "dist_tgt": 0.41761226035642235,
+          "dist_tgt": 0.252396206314596,
           "final": [
-            -0.256,
-            8.353,
-            1.353
+            0.137839,
+            8.220679,
+            1.099964
           ]
         }
       ],
