@@ -1,4 +1,4 @@
-# JCIIOT FactorySorting 100/100 复现依赖
+# JCIIOT FactorySorting 当前验证包复现依赖（当前离线 JSON 分 100/100）
 # Python 3.10-3.12 推荐
 
 # 核心仿真

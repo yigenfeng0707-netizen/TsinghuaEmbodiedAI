@@ -55,11 +55,11 @@ check-models: ## 检查模型文件是否就位
 
 ##@ 测试
 
-test: ## 运行所有测试
-	pytest tests/ -v
+test: ## 运行项目测试
+	pytest JCIIOT/tests -v
 
 test-cov: ## 运行测试并生成覆盖率报告
-	pytest tests/ --cov=JCIIOT --cov-report=html
+	pytest JCIIOT/tests --cov=JCIIOT --cov-report=html
 	@echo "$(COLOR_GREEN)覆盖率报告已生成: htmlcov/index.html$(COLOR_RESET)"
 
 syntax-check: ## Python 语法检查
@@ -106,9 +106,20 @@ docker-logs: ## 查看 Docker 日志
 
 ##@ 验证
 
-validate-100: ## 验证 100/100（需要 DSW 实例运行中）
-	@echo "$(COLOR_YELLOW)启动 ChampionTransportFlow 100/100 验证...$(COLOR_RESET)"
-	$(PYTHON) scripts/debug_stages/stage264_test_champion_flow.py
+score-trajectories: ## 离线评分 submission/trajectories
+	$(PYTHON) JCIIOT/tools/score_trajectories_offline.py submission/trajectories
+
+audit-physics: ## 审计散装轨迹物理合理性
+	$(PYTHON) JCIIOT/tools/audit_trajectory_physics.py submission/trajectories
+
+audit-zip: ## 审计 Biendata validation zip 物理合理性
+	$(PYTHON) JCIIOT/tools/audit_trajectory_physics.py --zip submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip
+
+validate-trajectories: score-trajectories audit-physics audit-zip ## 验证当前轨迹包（当前实测 90/100）
+	@echo "$(COLOR_GREEN)[OK] 当前轨迹验证命令已完成；请查看分数与 physics_audit 输出$(COLOR_RESET)"
+
+validate-100: validate-trajectories ## 历史别名：当前不保证 100/100
+	@echo "$(COLOR_YELLOW)注意：validate-100 是历史别名；当前 validation zip 实测为 90/100$(COLOR_RESET)"
 
 validate-pickup: ## 验证 PickUpSkill（5 关卡）
 	@echo "$(COLOR_YELLOW)启动 PickUpSkill 端到端测试...$(COLOR_RESET)"
@@ -134,4 +145,4 @@ git-status: ## 查看 git 状态
 
 .PHONY: help setup setup-dev check-deps download-models check-models test test-cov syntax-check \
 		paper-build paper-clean paper-view docker-build docker-up docker-down docker-shell docker-logs \
-		validate-100 validate-pickup clean clean-all git-status
+		score-trajectories audit-physics audit-zip validate-trajectories validate-100 validate-pickup clean clean-all git-status

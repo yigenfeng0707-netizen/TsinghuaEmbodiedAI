@@ -1,4 +1,4 @@
-# Dockerfile for JCIIOT FactorySorting 100/100 Reproduction
+# Dockerfile for JCIIOT FactorySorting reproduction
 # 基于 NVIDIA CUDA 镜像，包含 MuJoCo + EGL 渲染环境
 #
 # 构建命令：
@@ -14,7 +14,7 @@
 FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
 LABEL maintainer="Yigen Feng <fengyigen@qq.com>"
-LABEL description="JCIIOT FactorySorting 100/100 reproduction environment"
+LABEL description="JCIIOT FactorySorting reproduction environment"
 LABEL version="1.0.0"
 
 # 避免交互式安装

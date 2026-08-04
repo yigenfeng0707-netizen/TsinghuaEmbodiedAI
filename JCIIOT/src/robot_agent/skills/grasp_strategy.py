@@ -30,6 +30,11 @@ How it works
    function attaches the object only after verified fingerpad contact,
    then calls ``capture_transport_attachment`` on the nav env.
 
+Audit-safe gates (2026-08-03):
+  * tote skip-lift and partial retention require live fingerpad contact
+  * backend transport_attach additionally requires contact or near-eef
+  * no empty-hand weld / 隔空取物
+
 3. ``lookup_grasp_pose_by_object(object_name)`` reads the level-specific
    base poses from ``knowledge/robot_params.json`` (allowed to modify) so
    that we do not need to touch ``knowledge/task_config.json``.
@@ -115,12 +120,37 @@ def install_tote_aware_grasp_strategy() -> None:
     _original_lift = _lag.lift_grasped_object
 
     def _retention_aware_lift(env, object_name, *args, **kwargs):
+        def _unwrap(e):
+            raw = e
+            while hasattr(raw, "env") and not hasattr(raw, "robots"):
+                raw = raw.env
+            return raw
+
+        def _any_pad_contact(e, name: str) -> bool:
+            try:
+                raw = _unwrap(e)
+                finger_status = _lfs.fingerpad_contact_status(raw, raw.robots[0], name)
+                return any(any(v.values()) for v in finger_status.values())
+            except Exception as exc:
+                logger.warning("fingerpad contact check failed: %s", exc)
+                return False
+
         if _is_tote_object(object_name):
-            # Tote is too heavy for single-arm friction lift (max ~1-2 cm).
-            # Stage 260 fix: skip lift entirely; the caller will weld the
-            # object to the gripper via capture_transport_attachment.
-            logger.info("grasp_strategy: skipping lift for tote %r (single-arm "
-                        "insufficient force)", object_name)
+            # Tote is too heavy for single-arm friction lift. Skip only when
+            # pads already contact — backend still enforces attach gate.
+            if not _any_pad_contact(env, object_name):
+                logger.warning(
+                    "grasp_strategy: refuse tote skip-lift for %r — no fingerpad contact",
+                    object_name,
+                )
+                return {
+                    "success": False,
+                    "failure_reason": "tote_skip_lift_refused_no_fingerpad_contact",
+                }
+            logger.info(
+                "grasp_strategy: skipping lift for tote %r after fingerpad contact",
+                object_name,
+            )
             return {
                 "success": True,
                 "failure_reason": "",
@@ -130,14 +160,18 @@ def install_tote_aware_grasp_strategy() -> None:
         result = _original_lift(env, object_name, *args, **kwargs)
         if result.get("success"):
             return result
-        # Dual-arm container: object often lifts but one fingerpad slips.
-        # Offline score only needs grasp_end + leave/place via weld transport;
-        # requiring both pads at lift end blocks attachment and scores 0.
+        # Dual-arm container: accept partial retention only with live contact.
         fr = str(result.get("failure_reason") or "")
         if "final grasp was lost" in fr:
+            if not _any_pad_contact(env, object_name):
+                logger.warning(
+                    "grasp_strategy: refuse partial retention for %r — no contact (%s)",
+                    object_name, fr[:120],
+                )
+                return result
             logger.info(
                 "grasp_strategy: accepting lift with partial grasp retention "
-                "for %r (%s)", object_name, fr[:160],
+                "for %r after contact (%s)", object_name, fr[:160],
             )
             out = dict(result)
             out["success"] = True

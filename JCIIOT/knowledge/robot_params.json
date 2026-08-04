@@ -49,11 +49,12 @@
     "settle_steps": 10
   },
   "place": {
-    "_comment": "放置参数 —— 控制物体下放和释放的精细操作",
-    "lower_delta": 0.12,
-    "lower_steps": 25,
-    "release_steps": 60,
-    "release_clearance": 0.06
+    "_comment": "放置参数 —— 控制物体下放和释放的精细操作。禁止 set_joint_qpos 传送到站心；靠 weld 下降 + 开爪 + 物理沉降。",
+    "lower_delta": 0.22,
+    "lower_steps": 40,
+    "release_steps": 40,
+    "release_clearance": 0.04,
+    "settle_steps": 16
   },
   "grasp_poses_by_object": {
     "_comment": "关卡专属抓取位姿 —— 替代 task_config.json 的 grasp_poses_by_level（合规：仅修改 robot_params.json）。由 skills/pick_up.py 通过 lookup_grasp_pose_by_object() 读取。位姿来源：stage240 实测验证成功的 robot_base_pos。",
@@ -83,7 +84,7 @@
     "green_tote_b01_lower": {
       "pos": [
         12.55,
-        3.20,
+        3.2,
         0.0
       ],
       "yaw": -3.14,
@@ -106,7 +107,7 @@
     },
     "blue_container_h01_back_upper": {
       "pos": [
-        -8.90,
+        -8.9,
         5.34,
         0.0
       ],
@@ -118,7 +119,7 @@
     },
     "blue_container_h01_back_lower": {
       "pos": [
-        -8.90,
+        -8.9,
         4.54,
         0.0
       ],
@@ -129,7 +130,7 @@
     },
     "white_tote_b01_left_center": {
       "pos": [
-        -13.70,
+        -13.7,
         4.95,
         0.0
       ],
@@ -137,52 +138,55 @@
       "level": "L5",
       "type": "tote",
       "source": "input_1",
-      "note": "Object≈(-14.67,4.95); NOT task_config input_1=(5.03,-3.84)"
+      "note": "Working grasp x=-13.70; -13.45 was too far for fingerpad contact"
     },
     "blue_tote_b01_far_right": {
       "pos": [
         -0.11,
-        7.75,
+        7.55,
         0.0
       ],
       "yaw": 1.5708,
       "level": "L3",
       "type": "tote",
       "source": "aux_input_1",
-      "note": "Closer approach to far_right≈(-0.22,8.47) facing +y"
+      "note": "Match aux approach y=7.55; south of AABB face~8.05 with ~0.5m gap; 7.35 was too far for grasp"
     },
     "blue_tote_b01_near_right": {
       "pos": [
         0.44,
-        7.75,
+        7.55,
         0.0
       ],
       "yaw": 1.5708,
       "level": "L3",
       "type": "tote",
-      "source": "aux_input_1"
+      "source": "aux_input_1",
+      "note": "Match aux approach y=7.55; south of AABB face~8.05 with ~0.5m gap; 7.35 was too far for grasp"
     },
     "white_tote_b01_left_front": {
       "pos": [
-        -13.70,
+        -13.7,
         4.42,
         0.0
       ],
       "yaw": -3.14,
       "level": "L5",
       "type": "tote",
-      "source": "input_1"
+      "source": "input_1",
+      "note": "Working grasp x=-13.70; -13.45 was too far for fingerpad contact"
     },
     "white_tote_b01_left_back": {
       "pos": [
-        -13.70,
+        -13.7,
         5.52,
         0.0
       ],
       "yaw": -3.14,
       "level": "L5",
       "type": "tote",
-      "source": "input_1"
+      "source": "input_1",
+      "note": "Working grasp x=-13.70; -13.45 was too far for fingerpad contact"
     }
   }
 }

@@ -195,7 +195,7 @@ def train_from_scratch(base_dir: Path) -> bool:
 4. 训练 BC RNN policy（800 epochs, ~13 分钟）:
    参考 bc_config_v4_lowdim.json 配置
 
-5. 验证 100/100:
+5. 验证当前轨迹包:
    python stage264_test_champion_flow.py
 """)
     return False

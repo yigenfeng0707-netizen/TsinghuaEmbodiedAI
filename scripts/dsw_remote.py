@@ -27,11 +27,17 @@ from typing import Optional
 
 
 # ============== 配置 ==============
-DSW_URL = "https://dsw-gateway-cn-hangzhou.data.aliyun.com/dsw-XXXXX/lab"  # 替换为你的 DSW 实例 URL
-JUNCTION_PATH = r"C:\Users\<YOUR_USER>\AppData\Local\Google\Chrome\UserData_CDP"  # 替换为你的路径
+DSW_URL = os.environ.get(
+    "DSW_URL",
+    "https://dsw-gateway-cn-hangzhou.data.aliyun.com/dsw-XXXXX/lab",
+)
+JUNCTION_PATH = os.environ.get(
+    "CHROME_CDP_PROFILE",
+    str(Path.home() / "AppData" / "Local" / "Google" / "Chrome" / "UserData_CDP"),
+)
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"  # Windows 默认路径
 CDP_PORT = 9222
-TEMP_DIR = Path(r"<YOUR_PROJECT>\.trae\temp")  # 替换为你的项目路径
+TEMP_DIR = Path(os.environ.get("DSW_REMOTE_TEMP", str(Path(__file__).resolve().parents[1] / ".trae" / "temp")))
 TEMP_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -44,16 +50,20 @@ def ensure_chrome_with_cdp() -> bool:
     except Exception:
         pass
 
-    print("[Chrome] 杀掉残留 Chrome 进程...")
-    subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"], capture_output=True)
-    time.sleep(2)
+    if os.environ.get("DSW_REMOTE_KILL_CHROME") == "1":
+        print("[Chrome] 杀掉残留 Chrome 进程...")
+        subprocess.run(["taskkill", "/F", "/IM", "chrome.exe"], capture_output=True)
+        time.sleep(2)
+    else:
+        print("[Chrome] CDP 未就绪；将启动独立 CDP 窗口（不强杀现有 Chrome）")
 
     if not os.path.exists(JUNCTION_PATH):
         print(f"[Junction] 创建: {JUNCTION_PATH}")
+        target = Path.home() / "AppData" / "Local" / "Google" / "Chrome" / "User Data"
         subprocess.run(
             ["powershell", "-Command",
              f'New-Item -ItemType Junction -Path "{JUNCTION_PATH}" '
-             f'-Target "C:\\Users\\<YOUR_USER>\\AppData\\Local\\Google\\Chrome\\User Data" -Force'],
+             f'-Target "{target}" -Force'],
             capture_output=True
         )
 
@@ -123,7 +133,7 @@ class DswRemote:
 
         # 登录态验证
         if any(k in self.page.url.lower() for k in ["login", "account.aliyun", "signin"]):
-            print("[DSW] ❌ 被重定向到登录页，需手动登录")
+            print("[DSW] redirected to login page; manual login required")
             print("=" * 70)
             print("  ⚠️  请在 Chrome 窗口手动登录阿里云，脚本会自动检测")
             print("=" * 70)
@@ -131,13 +141,13 @@ class DswRemote:
                 await asyncio.sleep(1)
                 cur = self.page.url
                 if not any(k in cur.lower() for k in ["login", "account.aliyun", "signin"]):
-                    print(f"[DSW] ✅ 登录成功: {cur[:80]}")
+                    print(f"[DSW] login succeeded: {cur[:80]}")
                     return True
                 if i % 30 == 29:
                     print(f"  等待登录... ({i+1}s)")
             raise RuntimeError("5 分钟登录超时")
 
-        print("[DSW] ✅ 登录态有效")
+        print("[DSW] login session is valid")
         # 等 JupyterLab 完全加载
         await asyncio.sleep(5)
         return True

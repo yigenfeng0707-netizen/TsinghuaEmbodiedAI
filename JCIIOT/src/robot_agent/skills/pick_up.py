@@ -81,10 +81,11 @@ def _resolve_station_name(target: str, scene: SceneContext) -> str:
     if target in known:
         return target
 
-    # 1) known name is a substring of target
-    for name in known:
-        if name in target:
-            return name
+    # 1) known name is a substring of target — longest wins
+    # (aux_output_1 must not resolve as output_1).
+    matches = [name for name in known if name in target]
+    if matches:
+        return max(matches, key=len)
 
     # 2) match by (role, index) — e.g. "1号进料口" → input station #1
     role, idx = _parse_role_index(target)
