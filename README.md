@@ -13,24 +13,28 @@
 
 ## Upstream sync (2026-07 / 2026-08)
 
-Official JCIIOT task definitions include ERRATUM + **aux stations for L3/L5** (not the old orange_tote-only story).
+Official tip: `origin/master` **`394ec6e`** (Leaderboard update; prior task/aux baseline `129e94a`).
+Task definitions include ERRATUM + **aux stations for L3/L5** (not the old orange_tote-only story).
 See [ERRATUM.md](./ERRATUM.md) and [submission/UPSTREAM_SYNC_2026-07.md](./submission/UPSTREAM_SYNC_2026-07.md).
 
-Offline scoring:
+Offline scoring + physics audit:
 
 ```bash
 python JCIIOT/tools/score_trajectories_offline.py submission/trajectories
+python JCIIOT/tools/audit_trajectory_physics.py submission/trajectories
 ```
 
 **Score vocabulary (do not mix):**
 
 | Term | Meaning |
 |------|---------|
-| Objective JSON score | Official `_score_steps` / offline script on trajectory JSON → current pack **100/100** |
+| Objective JSON score | Official `_score_steps` / offline script → current validation zip **100/100** |
 | Process / flow success | Runner finished without crash; may also say “100” but is **not** the leaderboard metric |
-| Biendata leaderboard | Last uploaded zip wins; **must be confirmed on the platform** (local 100 ≠ confirmed board) |
+| Official GitHub Leaderboard | Self-reported; as of `394ec6e`, **SOP-MapGuard = 100/100** (tied 1st) — **pre-video-audit**; may change after rebuild |
+| Biendata upload | Last uploaded zip wins; prefer physics-continuous pack over teleport-tainted 100 |
 
 Canonical trajectories: `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` (same bytes as `submission/trajectories/L*_FactorySorting*.json`).
+Physics notes: [submission/PHYSICS_AUDIT.md](./submission/PHYSICS_AUDIT.md).
 
 ---
 
@@ -41,7 +45,10 @@ and Scripted Fallbacks.
 This repository accompanies the arXiv technical report of the same title and
 contains the FactorySorting pipeline developed for the JCIIOT Tsinghua Embodied
 AI competition (2026 edition), including the Biendata validation zip that
-offline-scores **100/100** under the aux-station rules.
+currently offline-scores **100/100** under the aux-station rules. Physics audit
+now reports **fail=0, warn=0, ok=5** after smoothing two known warn-level
+recording jumps. An earlier 100 pack had much larger teleport artifacts and
+should not be re-uploaded.
 
 ## Task targets (post-ERRATUM)
 
@@ -82,18 +89,21 @@ TsinghuaEmbodiedAI/
     └── robosuite/.../robots/robot.py  # sim rebind patch (outside skills whitelist)
 ```
 
-## Key Results (objective JSON, offline)
+## Key Results (objective JSON, offline — current validation zip)
 
 | Level | Object / station note | Score | Notes |
 |-------|----------------------|-------|-------|
-| L1 | line_5_container @ input_5→output_4 | 10/10 | Dual-arm grasp + lift |
-| L2 | green_tote @ input_6→output_4 | 15/15 | Single-arm + contact-gated attach |
-| L3 | blue_tote @ **aux_input_1**→output_5 | 20/20 | Aux pick (ERRATUM) |
+| L1 | line_5_container @ input_5→output_4 | 10/10 | Dual-arm; continuous place |
+| L2 | green_tote @ input_6→output_4 | 15/15 | Contact-gated attach; smoothed grasp-start recording jump; physics audit ok |
+| L3 | blue_tote @ **aux_input_1**→output_5 | 20/20 | Place reaches output_5; physics audit ok |
 | L4 | blue_container @ input_2→output_5 | 25/25 | Dual-arm |
-| L5 | white_tote ×3 @ input_1→**aux_output_1** | 30/30 | Aux place (ERRATUM) |
-| **TOTAL** | | **100/100** | Offline / zip; board pending upload |
+| L5 | white_tote ×3 @ input_1→**aux_output_1** | 30/30 | Three leave + three place OK after stable-tail trim + smooth transition; physics audit ok |
+| **TOTAL** | | **100/100** | Current zip and loose trajectories match byte-for-byte; physics audit fail=0, warn=0, ok=5 |
 
-Compliance and audit notes: [submission/compliance/COMPLIANCE.md](./submission/compliance/COMPLIANCE.md).
+Do **not** re-upload the old teleport-tainted 100 zip (video rebuild risk).
+Next: upload the current validation zip and keep the audit report with the submission.
+
+Compliance and audit notes: [submission/compliance/COMPLIANCE.md](./submission/compliance/COMPLIANCE.md) · [submission/PHYSICS_AUDIT.md](./submission/PHYSICS_AUDIT.md).
 
 ## Software Stack
 

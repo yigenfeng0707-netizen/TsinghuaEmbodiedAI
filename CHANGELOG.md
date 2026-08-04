@@ -16,7 +16,7 @@
 ## [1.0.0] - 2026-07-21
 
 ### Added
-- **核心成果**: JCIIOT FactorySorting 5 关卡 100/100 满分
+- **历史成果**: JCIIOT FactorySorting 5 关卡曾达到 100/100 JSON 几何分；当前推荐 validation zip 以根 README 的实测状态为准
   - L1: line_5_container_h01_near (container, 10/10)
   - L2: green_tote_b01_upper (tote, 15/15)
   - L3: orange_tote_b01_upper (tote, 20/20)

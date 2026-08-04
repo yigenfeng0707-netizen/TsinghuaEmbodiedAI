@@ -50,12 +50,12 @@
 | 提交者 | Yigen Feng |
 | 邮箱 | fengyigen@qq.com |
 | 关联比赛 | JCIIOT 2026 工业具身智能挑战赛 |
-| 离线客观分（zip） | 100/100（排行榜须平台确认） |
+| 离线客观分（zip） | 100/100（排行榜须平台确认；物理审计 fail=0 warn=0） |
 
 ## 仓库内容
 
 - `JCIIOT/` - 比赛代码（含 skills monkey-patch；**亦修改了** `environments/robosuite_backend.py` 等，见 `submission/compliance/COMPLIANCE.md`）
-- `submission/trajectories/` - 5 个官方模板格式轨迹（与 Biendata 100 zip 一致）
+- `submission/trajectories/` - 5 个官方模板格式轨迹（与当前 Biendata validation zip 一致）
 - `submission/technical_report/` - 技术报告（Word+PDF+LaTeX）
 - `submission/videos_v5/` - 演示视频（叙事纪录片）
 - `papers/bc_debugging_lessons/` - LaTeX 学术论文（arXiv 格式）

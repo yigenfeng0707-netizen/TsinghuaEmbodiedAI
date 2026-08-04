@@ -20,14 +20,14 @@
 - [troubleshooting.md](troubleshooting.md) - 常见问题排查
 
 ### 复现指南
-- [reproduction.md](reproduction.md) - 100/100 完整复现步骤
+- [reproduction.md](reproduction.md) - 当前 JSON 100/100 轨迹验证与复现步骤
 - [environment.md](environment.md) - 环境配置详解
 - [training.md](training.md) - BC Policy 训练指南
 
 ## 快速链接
 
 - **论文 PDF**: [../paper/main.pdf](../paper/main.pdf)
-- **100/100 配置**: [../config/100_100_success/](../config/100_100_success/)
+- **历史 100/100 快照（非当前推荐提交包）**: [../config/100_100_success/](../config/100_100_success/)
 - **调试脚本**: [../scripts/debug_stages/](../scripts/debug_stages/)
 - **CHANGELOG**: [../CHANGELOG.md](../CHANGELOG.md)
 - **贡献指南**: [../CONTRIBUTING.md](../CONTRIBUTING.md)

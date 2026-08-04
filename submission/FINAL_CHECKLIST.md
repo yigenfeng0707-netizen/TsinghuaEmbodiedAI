@@ -3,7 +3,7 @@
 > **生成时间**: 2026-07-21（分数/合规口径于 **2026-08-01** 修订）
 > **仓库**: https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
 > **提交截止**: 以 Biendata 账户内显示为准（本地曾写 08-16；平台页亦见 Close 09-01，勿盲信单一日期）
-> **当前状态**: 材料已准备（zip/离线客观 **100/100**），**待用户上传 Biendata 并加评委权限后正式提交**
+> **当前状态**: 材料已准备（zip/离线客观 **100/100**；物理审计 fail=0, warn=0, ok=5），**待用户上传 Biendata 并加评委权限后正式提交**
 
 ---
 
@@ -15,7 +15,7 @@
 
 ### 当前状态
 - [x] GitHub 仓库已建立：https://github.com/yigenfeng0707-netizen/TsinghuaEmbodiedAI
-- [x] 已推送最新代码（以 `mine/main` HEAD 为准；轨迹与 Biendata 100 zip 对齐）
+- [x] 已推送最新代码（以 `mine/main` HEAD 为准；轨迹与当前 Biendata validation zip 对齐）
 - [ ] 仓库可见性已设置（公开 或 私有+评委权限）
 - [ ] 官网提交通知收到
 - [ ] 已在官网提交仓库链接
@@ -75,7 +75,7 @@
 | 7 | 客观分基线 | `submission/trajectories/score_baseline.json` | — | ✅ | 官方规则离线复算 **100/100** |
 | 8 | Biendata zip | `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` | — | ✅ | 仅含 5 个 FactorySorting JSON（权威包） |
 
-**客观分验证（官方 `_score_steps` / 离线脚本）**：**100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；五关无 collision）。旧 **19/100** 松散轨迹口径已作废。Biendata 排行榜须用户自行上传/确认（last-upload-wins）。
+**客观分验证（官方 `_score_steps` / 离线脚本）**：**100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；五关无 collision）。旧 **19/100** 松散轨迹口径与旧大瞬移 **100/100** 口径均作废。Biendata 排行榜须用户自行上传/确认（last-upload-wins）。
 
 ### 材料 3：技术报告（必交）
 
@@ -116,7 +116,7 @@
 |---|------|------|------|------|
 | 1 | Technology Description | ✅ 必填 | 论文 02-04 章（方法论+四元数+脚本抓取） | ✅ |
 | 2 | Novelty Statement | 🔥 强烈推荐 | 论文 08 章（4 轴创新+引用 19 篇） | ✅ |
-| 3 | Results & Analysis | ✅ 必填 | 论文 05-06 章（100/100+消融实验） | ✅ |
+| 3 | Results & Analysis | ✅ 必填 | 论文 05-06 章（当前 JSON 100/100 + 物理审计 ok + 消融实验） | ✅ |
 
 ### 材料 4：视频演示（可选但有加分）
 
@@ -151,7 +151,7 @@
 | 2 | L2 (FactorySorting3) | 15 | **15** | ✅ |
 | 3 | L3 (FactorySorting5) | 20 | **20** | ✅ |
 | 4 | L4 (FactorySorting7) | 25 | **25** | ✅ |
-| 5 | L5 (FactorySorting9) | 30 | **30** | ✅ |
+| 5 | L5 (FactorySorting9) | 30 | **30** | ✅ 物理审计 ok |
 | **总计（流程）** | | **100** | 流程跑通 ≠ 客观分 | ⚠ |
 | **总计（客观 JSON / zip）** | | **100** | **100/100** 离线基线 | 榜上待确认上传 |
 
@@ -194,7 +194,7 @@
 ### 5.5 技术报告章节检查
 - [ ] Technology Description（方法学+实现细节）
 - [ ] Novelty Statement（4 轴创新+19 篇引用）
-- [ ] Results & Analysis（100/100 + 消融实验）
+- [ ] Results & Analysis（当前 JSON 100/100 + 物理审计 ok + 消融实验）
 - [ ] 作者信息完整（冯亦根，中国电信杭州分公司）
 
 ### 5.6 评分验证

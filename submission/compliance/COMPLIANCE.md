@@ -58,13 +58,15 @@
 本仓库为降低核查风险，在 backend 抓取管线中采用 **contact-gated attach**：
 
 1. 先以 fingerpad 接触（tote：`any` 接触 salvage；container：接触 salvage）作为可附着信号之一；
-2. 仅在 grasp/lift/接触条件满足时调用 `capture_transport_attachment()`；
-3. 失败路径会跳过 attachment，避免「无接触硬焊」式假吸箱。
+2. 仅在 grasp/lift/接触条件满足且物体近 eef 时调用 `capture_transport_attachment()`；
+3. 失败路径会跳过 attachment，避免「无接触硬焊」式假吸箱；
+4. **2026-08-03 物理审计**：取消放置站心瞬移 / 硬 pin；录帧 overlay 已放置位姿；详见 `submission/PHYSICS_AUDIT.md`。
 
 **残留风险（须向评委说清）**：
 
 - 接触门控降低了「无物理接触焊接」的观感，但 **backend 本身仍属禁止路径修改**；
-- 离线/zip 客观分 **100/100** 证明轨迹几何与 leave/place/collision 规则通过，**不等于**代码审计一定判合规；
+- 离线/zip 客观分 **100/100** 证明当前轨迹几何规则通过，**不等于**代码审计一定判合规，也**不等于**视频重建物理完全洁净；
+- 旧 Biendata zip 含 1–15 m 物体瞬移，**必须 regen 后重传**；
 - 若组委会严格按 Manual 剔除禁止文件改动后复跑，分数可能下降——复现路径必须以当前树（含 backend / robot.py）为准，不得对外宣称「仅 skills 即可零 diff 复现 100」。
 
 ---
@@ -97,7 +99,7 @@ python -m robot_agent.skills.sop_generator \
 
 | 口径 | 数值 | 含义 |
 |------|------|------|
-| 离线客观分 / Biendata zip 内 JSON | **100/100** | `tools/score_trajectories_offline.py` 对 5 个 `L*_FactorySorting*.json` 复算；L3=`aux_input_1`→`output_5`，L5→`aux_output_1`，无 collision |
+| 离线客观分 / Biendata zip 内 JSON | **100/100** | `tools/score_trajectories_offline.py` 对 5 个 `L*_FactorySorting*.json` 复算；L1=10, L2=15, L3=20, L4=25, L5=30；无 collision；physics audit fail=0/warn=0 |
 | `summary.json` 流程成功 | 可能写 100 | 仅表示 Champion/流程跑通，**不是** `_score_steps` 客观分 |
 | Biendata 排行榜 | **待用户上传确认** | last-upload-wins；本地 100 ≠ 已上榜 100 |
 

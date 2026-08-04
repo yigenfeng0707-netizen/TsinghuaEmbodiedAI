@@ -2,7 +2,7 @@
 
 > **生成时间**: 2026-07-21
 > **提交截止**: 2026-08-16 23:59 (北京时间)
-> **当前状态**: 材料准备中，**未提交**，DSW 实例 dsw-2046778 已启动，准备生成合规轨迹
+> **当前状态（2026-08-04 复核）**: 本文件为历史准备清单，部分内容已过期；当前权威状态以根 `README.md`、`submission/README.md`、`submission/PHYSICS_AUDIT.md` 为准：validation zip 离线客观分 **100/100**，物理审计 fail=0/warn=0/ok=5。
 
 ---
 
@@ -38,13 +38,13 @@
 |------|------|----------|----------|
 | Technology Description | ✅ 必填 | 方法学和实现细节，含第三方库说明 | ✅ 已有（论文 02-04 章） |
 | Novelty Statement | 🔥 强烈推荐 | 创新性，与 SOTA 的差异，引用相关工作 | ✅ 已有（论文 08 章，含引用） |
-| Results & Analysis | ✅ 必填 | 定量 + 定性结果，性能、优势、局限 | ✅ 已有（论文 05 章 + 100/100 结果） |
+| Results & Analysis | ✅ 必填 | 定量 + 定性结果，性能、优势、局限 | ✅ 已有（论文 05 章；当前交付需按 JSON 100/100 + 物理审计 ok 表述） |
 
 ### 4. 评分规则
 
 | 维度 | 权重 | 评分方式 | 我们的优势 |
 |------|------|----------|-----------|
-| **Performance** | 60% | 客观评分程序 | ✅ 100/100 满分 |
+| **Performance** | 60% | 客观评分程序 | 当前 validation zip 离线复算 **100/100** |
 | **Innovation** | 40% | 至少 3 位专家评审 | ✅ 4 步调试方法论 + 运行时 monkey-patch 合规策略 |
 
 **Performance 评分细节**：
@@ -177,7 +177,7 @@
 
 ### 现有轨迹文件状态
 
-🔴 **不符合模板**: `submission/trajectories/L1.json ~ L5.json` 是 stage264 测试摘要格式（含 level/source/target/steps 字段），**不是**官方模板格式。需要通过 `record_trajectory.py` 或 `backend.save_trajectory()` 重新生成。
+✅ **当前已符合模板**: `submission/trajectories/L*_FactorySorting*.json` 为官方模板格式，并与 `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` 字节一致。
 
 ---
 
@@ -317,7 +317,7 @@ submission/videos/
 ### 技术报告检查
 - [x] Technology Description（方法学）
 - [x] Novelty Statement（创新性，含引用）
-- [x] Results & Analysis（100/100 结果）
+- [x] Results & Analysis（当前 JSON 100/100 结果 + 物理审计 ok）
 - [x] 引用相关工作（16 篇参考文献）
 - [x] 作者信息完整（冯亦根，中国电信杭州分公司）
 
@@ -345,7 +345,7 @@ submission/videos/
 - [x] 整理合规代码（submission/code/）
 - [ ] 确认报名状态（需用户操作）
 - [ ] 通过 DSW 生成 5 个合规轨迹文件（dsw-2046778 已启动）
-- [ ] 通过 app.py 验证 100/100
+- [ ] 通过离线脚本验证当前 validation zip 100/100，并记录 physics fail=0/warn=0
 - [ ] 制作视频演示（可选）
 - [ ] 提交（等待官方通知）
 

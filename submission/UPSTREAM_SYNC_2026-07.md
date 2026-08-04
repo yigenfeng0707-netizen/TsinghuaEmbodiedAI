@@ -1,6 +1,6 @@
 # 官方仓同步与客观分重建说明（2026-07-31）
 
-对照 `JCIIOT2026/JCIIOT2026@129e94a`。
+对照 `JCIIOT2026/JCIIOT2026@129e94a`（任务/aux/评分基线）；官方 README 榜单后续更新至 **`394ec6e`**（SOP-MapGuard 自报 100/100，仍待视频/代码核查）。
 
 ## 已合入
 
@@ -19,14 +19,15 @@
 - 平台客观分**只看轨迹 JSON**，多次提交以最后一次为准。
 - 未做代码核查前的分可能在核查后变化；禁止靠改 JSON「吸箱子」。
 - 本地离线脚本：`JCIIOT/tools/score_trajectories_offline.py`
-- **2026-08-01 更新**：`submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` 与已覆盖的 `submission/trajectories/L*_FactorySorting*.json` 离线客观分均为 **100/100**（L3 aux_input_1 / L5 aux_output_1，无 collision）。明细见 `score_baseline.json`。
-- 历史备注：同步当周曾短暂以 **19/100** 为旧松散轨迹基线；该口径已作废，勿再引用为当前交付分。
-- Biendata **排行榜是否已显示 100** 必须以平台最后一次上传为准（本地 100 ≠ 已上榜）。
+- **2026-08-04 当前 validation zip**：`score_baseline.json` = **100/100**（L1/L2/L3/L4/L5 满分）。相对旧「瞬移 100」：大部分 1–15 m `place_teleport` 已去掉，`physics_audit` 现为 fail=0、warn=0、ok=5。**请上传/保留** `submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` 作为当前权威包，不要再上传旧大瞬移包。
+- **2026-08-01 更新（已作废为交付 zip）**：曾有几何满分 100 但含隔空放物，评委视频重建会扣分。
+- 历史备注：同步当周曾短暂以 **19/100** 为旧松散轨迹基线；该口径已作废。
+- 官方 GitHub Leaderboard（`394ec6e`）自报 **SOP-MapGuard = 100/100**；以 Biendata 最后上传 + 终审视频为准。
 
 ## 提分关键（已完成 regen；保留备查）
 
-1. **L3**：必须抓 `blue_tote_*` 于 `aux_input_1`，放到 `output_5` — ✅ 已在 100 zip 中满足
-2. **L5**：放到 `aux_output_1`（不是 `output_6`）— ✅ 已在 100 zip 中满足
+1. **L3**：必须抓 `blue_tote_*` 于 `aux_input_1`，放到 `output_5` — ✅ 已在当前 validation zip 中满足
+2. **L5**：放到 `aux_output_1`（不是 `output_6`）— ⚠️ 当前 validation zip 为 20/30，仍需收紧两个 tote 的 place
 3. **L2/L4**：真正落到台面（`dist<0.80` 且合理 z），降低 `has_collision` — ✅ zip 五关 `collision=False`
 
 ```bash

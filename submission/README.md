@@ -3,8 +3,9 @@
 > **提交方**: 冯亦根 (Yigen Feng) · 中国电信股份有限公司杭州分公司 · 队名 **SOP-MapGuard**
 > **比赛**: JCIIOT 2026 工业具身智能挑战赛 — 5 级 FactorySorting
 > **客观分基线（JSON 离线复算 / Biendata zip）**: **100/100**（L1=10, L2=15, L3=20, L4=25, L5=30；无 collision）
+> **物理审计**: L1-L5 ok；fail=0，warn=0（已平滑 L2/L5 两处记录级 jump）
 > **说明**: `summary.json` 的流程成功 ≠ `_score_steps` 客观分；排行榜以 Biendata 最后一次上传为准（本地 100 ≠ 已上榜）
-> **日期**: 2026-08-01（aux 站轨迹已覆盖进 `trajectories/`，与 zip 一致）
+> **日期**: 2026-08-04（aux 站轨迹已覆盖进 `trajectories/`，与 zip 字节一致）
 
 ---
 
@@ -222,8 +223,8 @@ python -m robot_agent.skills.sop_generator \
 | L2 | FactorySorting3_3FO3ERRPH7X9 | green_tote_b01_upper | tote | 15 | **15** | 单臂 grasp + 跳过 lift + weld |
 | L3 | FactorySorting5_3FO3ERTPXEUT | blue_tote @ aux_input_1→output_5 | tote | 20 | **20** | 物体位姿 + 接触门控附着 |
 | L4 | FactorySorting7_3FO3ERFKY9RN | blue_container_h01_back_upper | container | 25 | **25** | 双臂 grasp + lift；nav tuck |
-| L5 | FactorySorting9_3FO3ERT2C5FP | 3× white_tote @ input_1→aux_output_1 | tote | 30 | **30** | 多物体循环 + 接触门控 |
-| **总计** | | | | **100** | **100** | |
+| L5 | FactorySorting9_3FO3ERT2C5FP | 3× white_tote @ input_1→aux_output_1 | tote | 30 | **30** | 三个 leave OK；三个 place OK；物理审计 ok |
+| **总计** | | | | **100** | **100** | 当前 zip 与散装轨迹一致；physics fail=0 warn=0 ok=5 |
 
 ---
 
@@ -268,7 +269,7 @@ python -m robot_agent.skills.sop_generator \
    - container vs tote 物体类型差异发现
    - BC 训练 Loss 低但评估失败的根因分析（EGL 非确定性 + Quaternion 符号翻转）
    - 引用 19 篇相关工作（robomimic, robosuite, DART, IRIS, Diffusion Policy 等）
-3. **Results & Analysis**（论文 05-06 章）：100/100 满分 + 消融实验 + 5 关卡详细结果
+3. **Results & Analysis**（论文 05-06 章）：当前 JSON 100/100 实测结果、物理审计 ok + 消融实验 + 5 关卡详细结果
 
 ### 专业图表清单（8 张）
 
@@ -278,7 +279,7 @@ python -m robot_agent.skills.sop_generator \
 | fig2_champion_flow.png | 架构图 | ChampionTransportFlow 5 步骤流水线 |
 | fig3_monkey_patch.png | 架构图 | 运行时 monkey-patch 合规策略 |
 | fig4_container_vs_tote.png | 对比图 | container vs tote 物体类型差异 |
-| fig5_5level_scores.png | 数据图 | 5 关卡得分柱状图（100/100） |
+| fig5_5level_scores.png | 数据图 | 5 关卡得分柱状图（当前 JSON 100/100；物理审计 fail=0 warn=0） |
 | fig6_bc_loss.png | 数据图 | BC 训练 Loss 曲线（800 epochs） |
 | fig7_ablation.png | 数据图 | 消融实验对比（0→100 修复链） |
 | fig8_execution_time.png | 数据图 | 各关卡执行时间对比 |

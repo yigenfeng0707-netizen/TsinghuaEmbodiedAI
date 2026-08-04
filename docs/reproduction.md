@@ -1,6 +1,10 @@
-# 100/100 完整复现步骤
+# 当前 validation zip 复现与验证步骤
 
-本文档详细描述如何从零开始复现 100/100 满分结果。
+本文档描述如何复现并验证当前提交包。2026-08-04 本地实测：
+`submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip` 与
+`submission/trajectories/L*_FactorySorting*.json` 字节一致，离线客观分为
+**100/100**（L1=10, L2=15, L3=20, L4=25, L5=30）。物理审计结果为
+L1/L2/L3/L4/L5 ok，fail=0，warn=0。
 
 ## 前置条件
 
@@ -63,21 +67,27 @@ python scripts/download_models.py --source dsw --dsw-url https://dsw-gateway-cn-
 python scripts/download_models.py --source huggingface
 ```
 
-#### Step 4: 验证 100/100
+#### Step 4: 验证当前轨迹包
 ```bash
-# 运行 ChampionTransportFlow 完整测试
-python scripts/debug_stages/stage264_test_champion_flow.py
+# 离线客观评分
+python JCIIOT/tools/score_trajectories_offline.py submission/trajectories
+
+# 物理合理性审计
+python JCIIOT/tools/audit_trajectory_physics.py submission/trajectories
+
+# Biendata zip 审计
+python JCIIOT/tools/audit_trajectory_physics.py --zip submission/biendata_validation/SOP-MapGuard_validation_trajectories.zip
 ```
 
 预期输出：
 ```
-[RESULTS]
-L1: 10/10 (53.8s)
-L2: 15/15 (63.2s)
-L3: 20/20 (53.3s)
-L4: 25/25 (84.9s)
-L5: 30/30 (88.8s)
-TOTAL: 100/100
+TOTAL 100/100
+L1: 10/10
+L2: 15/15
+L3: 20/20
+L4: 25/25
+L5: 30/30
+physics_audit: overall fail=0 warn=0 ok=5
 ```
 
 ### 方式 2: 使用 Docker
@@ -109,7 +119,8 @@ docker run --gpus all -it --rm \
 ```bash
 cd /workspace
 python scripts/download_models.py
-python scripts/debug_stages/stage264_test_champion_flow.py
+python JCIIOT/tools/score_trajectories_offline.py submission/trajectories
+python JCIIOT/tools/audit_trajectory_physics.py submission/trajectories
 ```
 
 ### 方式 3: 从零训练（完全自主复现）
@@ -139,6 +150,7 @@ python scripts/train.py \
 ```bash
 python scripts/debug_stages/stage253_test_all_5_pickup.py
 python scripts/debug_stages/stage264_test_champion_flow.py
+python JCIIOT/tools/score_trajectories_offline.py submission/trajectories
 ```
 
 ## 关键修复链
@@ -203,8 +215,10 @@ pip install --upgrade numba  # → 0.66.0
 - [ ] lift_after_grasp.py 已应用 stage255/258 修复
 - [ ] load_factory_sorting_evalization.py 已应用 stage258 修复
 - [ ] model_epoch_150.pth 已下载到正确位置
-- [ ] PickUpSkill 端到端测试 100/100
-- [ ] ChampionTransportFlow 完整流程 100/100
+- [ ] PickUpSkill 端到端测试完成
+- [ ] ChampionTransportFlow 完整流程完成
+- [ ] 当前轨迹离线评分为 100/100
+- [ ] 物理审计已记录 fail=0 / warn=0 / ok=5
 
 ## 性能基准
 
