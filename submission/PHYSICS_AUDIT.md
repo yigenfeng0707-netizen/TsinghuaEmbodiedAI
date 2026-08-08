@@ -13,7 +13,25 @@
 
 ---
 
-## 2. 离线审计证据（修复前当前 zip / trajectories）
+## 2. 离线审计证据
+
+### 2a. 当前最新审计结果（2026-08-04 复算，权威）
+
+对当前 `submission/trajectories/L*_FactorySorting*.json`（= Biendata validation zip）运行 `audit_trajectory_physics.py`，结果 **fail=0, warn=0, ok=5**：
+
+| Level | worst Δ/frame (m) | flags | grasp_base_dist (m) | overall |
+|-------|-------------------|-------|----------------------|---------|
+| L1 | 0.073 | [] | 0.929 | ok |
+| L2 | 0.249 | [] | 0.764 | ok |
+| L3 | 0.191 | [] | 0.981 | ok |
+| L4 | 0.074 | [] | 0.939 | ok |
+| L5 | 0.248 | [] | 0.975 | ok |
+
+> 注意：L2 (0.249) 与 L5 (0.248) 的 worst_jump 接近 warn 阈值 0.25，但均未触发。完整报告见 `submission/trajectories/physics_audit.json`。
+
+### 2b. 修复前历史数据（仅作对比，已作废）
+
+以下为修复前的旧轨迹审计结果，展示曾存在的物理违规及修复幅度：
 
 | Level | worst Δ/frame | 关键 flags | 现象 |
 |-------|---------------|-------------|------|

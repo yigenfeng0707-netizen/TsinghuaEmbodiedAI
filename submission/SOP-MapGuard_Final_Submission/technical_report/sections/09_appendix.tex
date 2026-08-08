@@ -1,0 +1,158 @@
+\appendix
+\section{Physics Audit Report}
+\label{app:physics_audit}
+
+This appendix summarizes the trajectory physics audit conducted on
+\textbf{2026-08-04} using \code{tools/audit\_trajectory\_physics.py}.
+The audit checks each trajectory JSON for:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Object teleport}: per-frame object position jump exceeding
+    the \texttt{warn} (0.25\,m) or \texttt{fail} (0.80\,m) threshold.
+    \item \textbf{Grasp-base distance}: object-to-base XY distance at grasp
+    time, \texttt{warn} 1.6\,m / \texttt{fail} 2.5\,m.
+    \item \textbf{Post-grasp teleport}: large jump immediately after grasp
+    event (indicates fake attach without contact).
+\end{itemize}
+
+\paragraph{Audit result: fail=0, warn=0, ok=5.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Level & worst jump (m) & flags & grasp-base dist (m) & overall \\
+\midrule
+L1 & 0.073 & --- & 0.929 & ok \\
+L2 & 0.249 & --- & 0.764 & ok \\
+L3 & 0.191 & --- & 0.981 & ok \\
+L4 & 0.074 & --- & 0.939 & ok \\
+L5 & 0.248 & --- & 0.975 & ok \\
+\bottomrule
+\end{tabular}
+\caption{Physics audit results for the five submitted trajectories
+(\texttt{L*\_FactorySorting*.json} in the Biendata validation zip).
+All five pass with zero warnings or failures.}
+\label{tab:physics_audit}
+\end{table}
+
+\paragraph{Note on L2 and L5.}
+The worst-jump values for L2 (0.249\,m) and L5 (0.248\,m) are close to the
+\texttt{warn} threshold of 0.25\,m but do not exceed it.  Frame-level review
+(see Appendix~\ref{app:suspicious_frames}) confirms these are normal
+contact-induced displacements on non-grasped objects, not teleport artifacts:
+\begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{L2 frame 275}: \code{green\_tote\_b01\_lower} shifted
+    $+0.234$\,m in Y.  The grasped object was \code{green\_tote\_b01\_upper}
+    (frame 196); the lower tote was displaced by contact during upper-tote
+    removal.
+    \item \textbf{L5 frame 4977}: \code{white\_tote\_b01\_left\_front}
+    shifted $-0.232$\,m in Z.  The most recent grasp was
+    \code{white\_tote\_b01\_left\_back} (frame 4942); the front tote
+    settled downward during placement of the back tote.
+\end{itemize}
+
+\paragraph{Before-vs-after comparison.}
+The regenerated trajectories eliminate the severe teleport artifacts present
+in earlier submissions:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lcccl@{}}
+\toprule
+Level & Before (m) & After (m) & Reduction & Key flag (before) \\
+\midrule
+L1 & 0.14  & 0.073 & $-48\%$ & ok \\
+L2 & 1.60  & 0.249 & $-84\%$ & \code{place\_teleport} \\
+L3 & 14.34 & 0.191 & $-99\%$ & \code{place\_teleport} + \code{tracks\_base\_far} \\
+L4 & 1.65  & 0.074 & $-96\%$ & \code{place\_teleport} \\
+L5 & 15.72 & 0.248 & $-98\%$ & \code{place\_teleport} + \code{post\_grasp\_jump} \\
+\bottomrule
+\end{tabular}
+\caption{Physics audit before and after the trajectory regeneration.
+Earlier versions exhibited 1--15\,m teleport jumps; the regenerated
+trajectories are all below the 0.25\,m warn threshold.}
+\label{tab:physics_before_after}
+\end{table}
+
+
+\section{Suspicious Frame Analysis}
+\label{app:suspicious_frames}
+
+This appendix documents the frame-level visual review of the two
+worst-jump frames (L2 frame 275, L5 frame 4977) identified in
+Appendix~\ref{app:physics_audit}.  Replay GIFs were generated on a
+DSW GPU instance using the official \code{RobosuiteBackend.replay\_trajectory}
+pipeline with \code{MUJOCO\_GL=glx} + Xvfb headless rendering.
+
+\paragraph{L2 frame 275: \code{green\_tote\_b01\_lower}, $\Delta$Y = +0.234\,m.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Field & Value & Note \\
+\midrule
+Trajectory & \code{L2\_FactorySorting3\_3FO3ERRPH7X9.json} & \\
+Total frames & 1618 & \\
+Anomalous object & \code{green\_tote\_b01\_lower} & non-grasped \\
+Anomaly frame & 275 & \\
+Jump magnitude & 0.2489\,m & threshold 0.25\,m (99.5\%) \\
+$\Delta$xyz & $(+0.075, +0.234, -0.041)$ & Y dominant (94\%) \\
+Grasped object & \code{green\_tote\_b01\_upper} & frame 196 \\
+Grasp-base dist & 0.764\,m & threshold 1.6\,m, ok \\
+Post-grasp jump & null & no fake-attach teleport \\
+Verdict & \textbf{ok} & contact displacement \\
+\bottomrule
+\end{tabular}
+\caption{L2 frame 275 anomaly detail.}
+\label{tab:l2_anomaly}
+\end{table}
+
+The displacement occurs 79 frames after the grasp event (frame 196) and
+is dominated by the Y component ($+0.234$\,m), consistent with the lower
+tote being pushed when the upper tote is lifted.  The grasped object
+(\code{green\_tote\_b01\_upper}) shows no teleport.  Visual inspection of
+the birdview GIF (frames 270$\to$275$\to$280) confirms continuous motion
+with no discontinuity.
+
+\paragraph{L5 frame 4977: \code{white\_tote\_b01\_left\_front}, $\Delta$Z = $-0.232$\,m.}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Field & Value & Note \\
+\midrule
+Trajectory & \code{L5\_FactorySorting9\_3FO3ERT2C5FP.json} & \\
+Total frames & 5833 & \\
+Anomalous object & \code{white\_tote\_b01\_left\_front} & non-grasped \\
+Anomaly frame & 4977 & \\
+Jump magnitude & 0.2480\,m & threshold 0.25\,m (99.2\%) \\
+$\Delta$xyz & $(-0.056, -0.068, -0.232)$ & Z dominant (93\%) \\
+Grasp events & 3 & frames 1664 / 3302 / 4942 \\
+Most recent grasp & \code{white\_tote\_b01\_left\_back} & frame 4942 \\
+Grasp-base dist & 0.975\,m & threshold 1.6\,m, ok \\
+Post-grasp jump & null & no fake-attach teleport \\
+Verdict & \textbf{ok} & placement settling \\
+\bottomrule
+\end{tabular}
+\caption{L5 frame 4977 anomaly detail.}
+\label{tab:l5_anomaly}
+\end{table}
+
+The displacement occurs 35 frames after the most recent grasp (frame 4942)
+and is dominated by the Z component ($-0.232$\,m), consistent with the
+front tote settling downward when the back tote is placed adjacent to it.
+Visual inspection of the birdview GIF (frames 4940$\to$4959$\to$4978)
+confirms a gradual downward motion, not a discontinuous teleport.
+
+\paragraph{Conclusion.}
+Both anomalous frames are \textbf{normal physical contact displacements} on
+non-grasped objects, not teleport or fake-attach violations.  The worst-jump
+values (0.249\,m / 0.248\,m) are below the 0.25\,m warn threshold, and the
+trajectory physics audit confirms \textbf{fail=0, warn=0, ok=5} for all five
+submitted trajectories.

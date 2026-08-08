@@ -86,3 +86,13 @@ submission/videos_v5/photos_enhanced/
 submission/videos_v5/segments/
 submission/videos_v5/srt/
 submission/videos_v5/verify/
+
+# 敏感:DSW/Aliyun 登录 cookie(绝不提交)
+JCIIOT/ms_session_cookies.json
+**/ms_session_cookies.json
+
+# 临时分析文件
+backend_diff.txt
+
+# DSW 回放 GIF(本地自检用,不提交到仓库)
+JCIIOT/submission/replay_gifs/
