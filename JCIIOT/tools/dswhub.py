@@ -5,7 +5,7 @@ logged-in Chrome profile (see tools/cdp_ms.py). The DSW gateway accepts the
 `login_aliyunid_ticket` cookie to authorize JupyterHub REST API calls.
 
 All methods talk to:
-    https://dsw-gateway-cn-hangzhou.data.aliyun.com/dsw-2043237/api/...
+    https://dsw-gateway-cn-hangzhou.data.aliyun.com/dsw-2085479/api/...
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import os
 import requests
 
 DOMAIN = "https://dsw-gateway-cn-hangzhou.data.aliyun.com"
-BASE = DOMAIN + "/dsw-2043237"
+BASE = DOMAIN + "/dsw-2085479"
 COOKIE_CACHE = os.path.join(os.path.dirname(__file__), "..", "ms_session_cookies.json")
 
 
@@ -70,7 +70,7 @@ class Dswhub:
         r = self.s.post(BASE + "/api/terminals", timeout=30)
         r.raise_for_status()
         term = r.json()["name"]
-        ws_url = DOMAIN.replace("https://", "wss://") + f"/dsw-2043237/terminals/websocket/{term}"
+        ws_url = DOMAIN.replace("https://", "wss://") + f"/dsw-2085479/terminals/websocket/{term}"
         ws = websocket.create_connection(ws_url, header=[f"Cookie: login_aliyunid_ticket={self.ticket}"], timeout=30)
         ws.send(_json.dumps(["stdin", cmd + "\r"]))
         buf = ""
@@ -98,7 +98,7 @@ class Dswhub:
             r = self.s.post(BASE + "/api/kernels", json={"name": kernel_name}, timeout=30)
             r.raise_for_status(); kid = r.json()["id"]
         # open channels websocket
-        ws_url = DOMAIN.replace("https://", "wss://") + f"/dsw-2043237/api/kernels/{kid}/channels"
+        ws_url = DOMAIN.replace("https://", "wss://") + f"/dsw-2085479/api/kernels/{kid}/channels"
         ws = websocket.create_connection(ws_url, header=[f"Cookie: login_aliyunid_ticket={self.ticket}"], timeout=timeout)
         msg_id = "op-" + uuid.uuid4().hex[:8]
         ws.send(_json.dumps({"header": {"msg_id": msg_id, "username": "opencode", "session": msg_id,

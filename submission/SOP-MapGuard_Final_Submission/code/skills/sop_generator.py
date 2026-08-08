@@ -19,11 +19,10 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-# 智谱 API 默认配置（已验证可用，可通过环境变量 ZHIPU_API_KEY /
-# ZHIPU_BASE_URL / ZHIPU_MODEL 覆盖）
-DEFAULT_API_KEY = "608e441d08264fa98257baf063c6a7b7.Ko08EDn4wCaO5QS8"
-DEFAULT_BASE_URL = "https://open.bigmodel.cn/api/paas/v4/"
-DEFAULT_MODEL = "glm-5.2"
+# 智谱 API 默认配置（通过环境变量 ZHIPU_API_KEY / ZHIPU_BASE_URL / ZHIPU_MODEL 配置）
+DEFAULT_API_KEY = os.environ.get("ZHIPU_API_KEY", "")
+DEFAULT_BASE_URL = os.environ.get("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4/")
+DEFAULT_MODEL = os.environ.get("ZHIPU_MODEL", "glm-5.2")
 
 # 提示词摘要（写入 md 头部供评委审计）
 PROMPT_SUMMARY = (
