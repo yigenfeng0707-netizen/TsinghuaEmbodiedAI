@@ -68,8 +68,6 @@ JCIIOT/tools/keepalive.log
 JCIIOT/recordings/*/
 !JCIIOT/recordings/.gitkeep
 official_repo/
-archive/old_interference_2026/**
-!archive/old_interference_2026/README.md
 competition description/
 papers/
 .trae/
@@ -86,6 +84,16 @@ submission/videos_v5/photos_enhanced/
 submission/videos_v5/segments/
 submission/videos_v5/srt/
 submission/videos_v5/verify/
+
+# videos_v6 中间产物(仅保留 final 视频 + stage 脚本 + srt)
+submission/videos_v6/audio/
+submission/videos_v6/photos/
+submission/videos_v6/photos_enhanced/
+submission/videos_v6/segments/
+submission/videos_v6/charts/
+submission/videos_v6/verify/
+submission/videos_v6/concat_list.txt
+submission/videos_v6/final/narration_full.mp4
 
 # 敏感:DSW/Aliyun 登录 cookie(绝不提交)
 JCIIOT/ms_session_cookies.json
