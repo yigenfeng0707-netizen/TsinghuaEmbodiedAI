@@ -35,7 +35,7 @@ httptools==0.8.0
 httpx==0.28.1
 huggingface-hub==0.23.4
 idna==3.4
-ImageIO==2.37.3
+ImageIO==2.37.4
 imageio-ffmpeg==0.6.0
 importlib_metadata==9.0.0
 importlib_resources==7.1.0
