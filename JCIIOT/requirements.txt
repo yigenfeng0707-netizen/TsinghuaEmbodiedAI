@@ -47,7 +47,7 @@ jsonschema-specifications==2025.9.1
 kiwisolver==1.5.0
 lit==15.0.7
 llvmlite==0.47.0
-Markdown==3.10.2
+Markdown==3.10.3
 markdown-it-py==4.2.0
 MarkupSafe==3.0.3
 matplotlib==3.10.9
