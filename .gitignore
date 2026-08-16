@@ -104,3 +104,16 @@ backend_diff.txt
 
 # DSW 回放 GIF(本地自检用,不提交到仓库)
 JCIIOT/submission/replay_gifs/
+
+# 本地归档目录（cleanup 残留归档,绝不提交）
+.local-archive/
+
+# GitHub 协作邀请自动化 scratch(2026-08-16 cleanup: 防止再污染工作树)
+.gh_*.json
+.ws.txt
+_t.txt
+add_collabs.js
+edge_launcher.js
+node_modules/
+package.json
+package-lock.json
