@@ -100,7 +100,7 @@ tensorboard==2.20.0
 tensorboard-data-server==0.7.2
 tensorboardX==2.6.5
 termcolor==3.3.0
-tokenizers==0.19.1
+tokenizers==0.23.3
 toml==0.10.2
 tomli==2.4.1
 torch==2.7.0
